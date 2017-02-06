@@ -58,4 +58,6 @@ def call():
     """
     return service()
 
+def idea():
+    return dict()
 
