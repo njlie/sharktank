@@ -149,7 +149,17 @@ db.define_table('posts',
                 Field('user_id', db.auth_user),
                 Field('idea_id', db.ideas),
                 Field('p_content', 'text'),
-                Field('p_date', 'datetime', default=lambda:datetime.now()))
+                Field('p_date', 'datetime', default=request.now, writable=False))
+#                Field('p_date', 'datetime', default=lambda:datetime.now()))
+
+db.define_table('ideas2',
+                Field('title', 'string'),
+                Field('description', 'text'),
+                Field('documents', 'upload'),
+                Field('active_idea', 'boolean', default=True),
+                Field('startdate', 'datetime', default=lambda:datetime.now()),
+                Field('enddate', 'datetime'),
+                Field('group_id', db.idea_groups))
 
 db.idea_groups.g_privileges.requires = IS_NOT_EMPTY()
 db.ideas.startdate.requires = IS_NOT_EMPTY()

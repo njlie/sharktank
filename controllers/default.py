@@ -58,6 +58,10 @@ def call():
     """
     return service()
 
+
 def idea():
-    return dict()
+    table = db.ideas2
+    grid=SQLFORM.grid(table)
+#    return dict(grid=grid)
+    return locals()
 
