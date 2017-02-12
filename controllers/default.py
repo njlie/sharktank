@@ -55,3 +55,10 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+<<<<<<< HEAD
+=======
+
+def idea():
+    return dict()
+
+>>>>>>> 81e5c13cc02f0e7a5c7ac3819718d7522f7305e9

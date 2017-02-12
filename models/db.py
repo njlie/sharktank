@@ -125,6 +125,35 @@ auth.settings.reset_password_requires_verification = True
 # >>> rows = db(db.mytable.myfield == 'value').select(db.mytable.ALL)
 # >>> for row in rows: print row.id, row.myfield
 # -------------------------------------------------------------------------
+from datetime import datetime
+# This table holds the group information
+db.define_table('idea_groups',
+                Field('user_id', db.auth_user),
+                Field('g_privileges', 'string'))
+# This table hold the data for each idea
+db.define_table('ideas',
+                Field('title', 'string'),
+                Field('description', 'text'),
+                Field('documents', 'upload'),
+                Field('active_idea', 'boolean', default=True),
+                Field('startdate', 'datetime', default=lambda:datetime.now()),
+                Field('enddate', 'datetime'),
+                Field('group_id', db.idea_groups))
+# This table holds the voting information
+db.define_table('votes',
+                Field('user_id', db.auth_user),
+                Field('idea_id', db.ideas),
+                Field('vote', 'boolean'))
+# This table holds the post data for an idea
+db.define_table('posts',
+                Field('user_id', db.auth_user),
+                Field('idea_id', db.ideas),
+                Field('p_content', 'text'),
+                Field('p_date', 'datetime', default=lambda:datetime.now()))
+
+db.idea_groups.g_privileges.requires = IS_NOT_EMPTY()
+db.ideas.startdate.requires = IS_NOT_EMPTY()
+db.votes.vote.requires = IS_NOT_EMPTY()
 
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
