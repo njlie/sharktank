@@ -60,8 +60,8 @@ def call():
 
 
 def idea():
-    table = db.ideas2
-    grid=SQLFORM.grid(table)
-#    return dict(grid=grid)
-    return locals()
+    #table = db.ideas
+    grid=SQLFORM.grid(db.ideas2)
+    return dict(grid=grid)
+#    return locals()
 
