@@ -138,19 +138,19 @@ db.define_table('ideas',
 
 # This table holds the group information
 db.define_table('idea_groups',
-                Field('user_id', db.auth_user, default=auth.user, writable=False),
+                Field('user_id', db.auth_user, default=auth.user_id, writable=False),
                 Field('idea_id', db.ideas),
                 Field('g_privileges', 'string', length=1))
 
 # This table holds the voting information
 db.define_table('votes',
-                Field('user_id', db.auth_user, default=auth.user),
+                Field('user_id', db.auth_user, default=auth.user_id),
                 Field('idea_id', db.ideas),
                 Field('vote', 'boolean'))
 
 # This table holds the post data for an idea
 db.define_table('posts',
-                Field('user_id', db.auth_user, default=auth.user),
+                Field('user_id', db.auth_user, default=auth.user_id),
                 Field('idea_id', db.ideas),
                 Field('p_content', 'text'),
                 Field('p_date', 'datetime', default=lambda:datetime.now()))
