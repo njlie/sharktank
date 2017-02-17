@@ -1,0 +1,63 @@
+db.tables
+db.ideas
+db.ideas.max
+db.ideas.max()
+db.ideas.id.max()
+db.ideas.id.max().int
+db.select(db.ideas.id==db.ideas.id.max())
+db.select(db.ideas)
+db().select(db.ideas)
+db().select(db.ideas.id==1)
+db().select(db.ideas.id=='1')
+db().select(db.ideas.id>0)
+db.select(db.ideas.ALL)
+db().select(db.ideas.ALL)
+db(db.ideas.id>0)
+db(db.ideas.id>0).max()
+db(db.ideas.id==db.ideas.id.max())
+db(db.ideas.id==db.ideas.id.max()).first()
+db(db.ideas.id==db.ideas.id.max()).select.first()
+db(db.ideas.id==db.ideas.id.max()).select().first()
+db(db.ideas.id=db.ideas.id.max()).select().first()
+db(db.ideas.id).select().max()
+db(db.ideas.id).select()
+db(db.ideas.id)
+print db(db.ideas.id)
+print db(db.ideas.id).first()
+print db(db.ideas.id).select().first()
+
+rows db(db.ideas.id)
+rows db(db.ideas.id).select()
+rows = db(db.ideas.id)
+rows[0]
+rows
+rows = db(db.ideas.id).select().first()
+rows = db(db.ideas.id).select()
+lsit(db(db.ideas.id))
+import list
+list(db(db.ideas.id))
+list(db(db.ideas.id).select())
+db(db.ideas.id).max()
+db(db.ideas.id).select().max()
+db.ideas.id.max()
+str(db.ideas.id.max())
+MAX(ideas.id)
+db(db.ideas.id).select(db.ideas.id.max())
+db(db.ideas.id).select(db.ideas.id.max())[0]
+db(db.ideas.id).select(db.ideas.id.max())
+db(db.ideas.id).select(db.ideas.id.max())['id']
+db(db.ideas.id).select(db.ideas.id.max())[id]
+db(db.ideas.id).select(db.ideas.id.max())
+db(db.ideas.id).select(db.ideas.id.max()).first()
+db().select(db.ideas.id.max())
+db().select(db.ideas.id.max())[0]
+db().select(fmax=db.ideas.id.max())[0][fmax]
+db().select((fmax=db.ideas.id.max()))[0][fmax]
+db().select(fmax=db.ideas.id.max())[0][fmax]
+db().select(db.ideas.id.max())[0]
+db().select(db.ideas.id.max())[0][MAX(ideas.id)]
+db().select(db.ideas.id.max())[0][db.ideas.id.max()]
+int(db().select(db.ideas.id.max())[0][db.ideas.id.max()])
+max=db.ideas.id.max()
+int(db().select(max)[0][max])
+quit()

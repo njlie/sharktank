@@ -1,4 +1,4 @@
-timestamp: 2017-01-24T15:40:42.041367
+timestamp: 2017-02-16T20:43:07.318133
 CREATE TABLE auth_user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name CHAR(128),
@@ -10,21 +10,21 @@ CREATE TABLE auth_user(
     registration_id CHAR(512)
 );
 success!
-timestamp: 2017-01-24T15:40:42.144095
+timestamp: 2017-02-16T20:43:07.379904
 CREATE TABLE auth_group(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     role CHAR(512),
     description TEXT
 );
 success!
-timestamp: 2017-01-24T15:40:42.233588
+timestamp: 2017-02-16T20:43:07.446617
 CREATE TABLE auth_membership(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  
 );
 success!
-timestamp: 2017-01-24T15:40:42.345902
+timestamp: 2017-02-16T20:43:07.514128
 CREATE TABLE auth_permission(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE  ,
@@ -33,7 +33,7 @@ CREATE TABLE auth_permission(
     record_id INTEGER
 );
 success!
-timestamp: 2017-01-24T15:40:42.457092
+timestamp: 2017-02-16T20:43:07.569841
 CREATE TABLE auth_event(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     time_stamp TIMESTAMP,
@@ -43,7 +43,7 @@ CREATE TABLE auth_event(
     description TEXT
 );
 success!
-timestamp: 2017-01-24T15:40:42.613332
+timestamp: 2017-02-16T20:43:07.647708
 CREATE TABLE auth_cas(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
@@ -53,14 +53,7 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
-timestamp: 2017-02-01T13:51:05.215096
-CREATE TABLE idea_groups(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
-    g_privileges CHAR(512)
-);
-success!
-timestamp: 2017-02-01T13:51:05.378651
+timestamp: 2017-02-16T20:43:07.715016
 CREATE TABLE ideas(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title CHAR(512),
@@ -68,11 +61,18 @@ CREATE TABLE ideas(
     documents CHAR(512),
     active_idea CHAR(1),
     startdate TIMESTAMP,
-    enddate TIMESTAMP,
-    group_id INTEGER REFERENCES idea_groups (id) ON DELETE CASCADE  
+    enddate TIMESTAMP
 );
 success!
-timestamp: 2017-02-01T13:51:05.496129
+timestamp: 2017-02-16T20:43:07.780588
+CREATE TABLE idea_groups(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    idea_id INTEGER REFERENCES ideas (id) ON DELETE CASCADE  ,
+    g_privileges CHAR(1)
+);
+success!
+timestamp: 2017-02-16T20:43:07.836736
 CREATE TABLE votes(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
@@ -80,7 +80,7 @@ CREATE TABLE votes(
     vote CHAR(1)
 );
 success!
-timestamp: 2017-02-01T13:51:05.609630
+timestamp: 2017-02-16T20:43:07.890915
 CREATE TABLE posts(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,

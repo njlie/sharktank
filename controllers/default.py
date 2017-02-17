@@ -19,6 +19,8 @@ def index():
     """
     return dict()
 
+
+
 def user():
     """
     exposes:
@@ -58,3 +60,17 @@ def call():
 
 def idea():
     return dict()
+
+
+def display_form():
+   form = SQLFORM(db.ideas)
+   if form.process().accepted:
+       db.idea_groups.insert(user_id=auth.user,
+                             g_privileges='O',
+                             idea_id=int(db().select(db.ideas.id.max())[0][db.ideas.id.max()]))
+       response.flash = 'form accepted'
+   elif form.errors:
+       response.flash = 'form has errors'
+   else:
+       response.flash = 'please fill out the form'
+   return dict(form=form)

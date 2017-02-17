@@ -89,26 +89,9 @@ I00
 sg10
 S'string'
 p26
-ssS'group_id'
+ssS'id'
 p27
 (dp28
-g4
-I512
-sg5
-I00
-sg6
-I8
-sg7
-S'INTEGER REFERENCES idea_groups (id) ON DELETE CASCADE  '
-p29
-sg9
-I00
-sg10
-S'reference idea_groups'
-p30
-ssS'id'
-p31
-(dp32
 g4
 I512
 sg5
@@ -117,14 +100,14 @@ sg6
 I1
 sg7
 S'INTEGER PRIMARY KEY AUTOINCREMENT'
-p33
+p29
 sg9
 I00
 sg10
-g31
+g27
 ssS'active_idea'
-p34
-(dp35
+p30
+(dp31
 g4
 I512
 sg5
@@ -133,10 +116,10 @@ sg6
 I5
 sg7
 S'CHAR(1)'
-p36
+p32
 sg9
 I00
 sg10
 S'boolean'
-p37
+p33
 ss.

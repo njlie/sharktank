@@ -126,10 +126,7 @@ auth.settings.reset_password_requires_verification = True
 # >>> for row in rows: print row.id, row.myfield
 # -------------------------------------------------------------------------
 from datetime import datetime
-# This table holds the group information
-db.define_table('idea_groups',
-                Field('user_id', db.auth_user),
-                Field('g_privileges', 'string'))
+
 # This table hold the data for each idea
 db.define_table('ideas',
                 Field('title', 'string'),
@@ -137,23 +134,50 @@ db.define_table('ideas',
                 Field('documents', 'upload'),
                 Field('active_idea', 'boolean', default=True),
                 Field('startdate', 'datetime', default=lambda:datetime.now()),
-                Field('enddate', 'datetime'),
-                Field('group_id', db.idea_groups))
+                Field('enddate', 'datetime'))
+
+# This table holds the group information
+db.define_table('idea_groups',
+                Field('user_id', db.auth_user, default=auth.user, writable=False),
+                Field('idea_id', db.ideas),
+                Field('g_privileges', 'string', length=1))
+
 # This table holds the voting information
 db.define_table('votes',
-                Field('user_id', db.auth_user),
+                Field('user_id', db.auth_user, default=auth.user),
                 Field('idea_id', db.ideas),
                 Field('vote', 'boolean'))
+
 # This table holds the post data for an idea
 db.define_table('posts',
-                Field('user_id', db.auth_user),
+                Field('user_id', db.auth_user, default=auth.user),
                 Field('idea_id', db.ideas),
                 Field('p_content', 'text'),
                 Field('p_date', 'datetime', default=lambda:datetime.now()))
 
-db.idea_groups.g_privileges.requires = IS_NOT_EMPTY()
-db.ideas.startdate.requires = IS_NOT_EMPTY()
+# O = Owner, C=Contributor, F=Follower
+db.idea_groups.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))
 db.votes.vote.requires = IS_NOT_EMPTY()
+
+# Triggers for keeping the tables in order
+
+# Creates a group associated with the idea and assigns the user as the owner
+
+
+#def get_id():
+#    max = db.ideas.id.max()
+##    print "Appending"
+#    db.idea_groups.insert(user_id=auth.user,
+#                          idea_id=int(db().select(max)[0][max]),
+#                          g_privileges='O')
+
+
+#db.ideas._after_insert.append(
+#    db.idea_groups.insert(user_id=auth.user,
+#                          idea_id=int(db().select(
+#                              db.ideas.id.max())[0][db.ideas.id.max()]),
+#                          g_privileges='O')
+#)
 
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
