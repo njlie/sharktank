@@ -66,8 +66,9 @@ def create_idea():
     form = SQLFORM(db.ideas)
     form.process()
     if form.accepted:
-       # The following line MUST be included when processing an idea in to the database.
-       # This line generates the group associated with the idea, adds the creator of the idea
+
+       # The following lines MUST be included when processing an idea in to the database.
+       # These lines generate the group associated with the idea, adds the creator of the idea
        # as the owner, and dumps it in to the db.
 
        try_by_user_groups= db(db.idea_groups.user_id==auth.user_id).select(
