@@ -25,7 +25,6 @@ db(db.ideas.id)
 print db(db.ideas.id)
 print db(db.ideas.id).first()
 print db(db.ideas.id).select().first()
-
 rows db(db.ideas.id)
 rows db(db.ideas.id).select()
 rows = db(db.ideas.id)

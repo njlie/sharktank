@@ -61,16 +61,33 @@ def call():
 def idea():
     return dict()
 
+@auth.requires_login()
+def create_idea():
+    form = SQLFORM(db.ideas)
+    form.process()
+    if form.accepted:
+       # The following line MUST be included when processing an idea in to the database.
+       # This line generates the group associated with the idea, adds the creator of the idea
+       # as the owner, and dumps it in to the db.
 
-def display_form():
-   form = SQLFORM(db.ideas)
-   if form.process().accepted:
-       db.idea_groups.insert(user_id=auth.user,
-                             g_privileges='O',
-                             idea_id=int(db().select(db.ideas.id.max())[0][db.ideas.id.max()]))
-       response.flash = 'form accepted'
-   elif form.errors:
-       response.flash = 'form has errors'
-   else:
-       response.flash = 'please fill out the form'
-   return dict(form=form)
+       try_by_user_groups= db(db.idea_groups.user_id==auth.user_id).select(
+           db.idea_groups.idea_id.max())[0][db.idea_groups.idea_id.max()]
+
+       failsafe = db().select(db.idea_groups.idea_id.max())[0][db.idea_groups.idea_id.max()]
+
+       if try_by_user_groups:
+           idea_id=int(try_by_user_groups) + 1
+       elif failsafe:
+           idea_id = int(failsafe) + 1
+       else:
+           idea_id = 1
+
+       db.idea_groups.insert(g_privileges='O', idea_id=idea_id)
+
+       response.view = 'default/index.html'
+       response.flash = 'Idea Processed'
+    elif form.errors:
+       response.flash = 'Woops! Something is wrong.'
+    else:
+       response.flash = 'Start here to spread your idea world round.'
+    return dict(form=form)

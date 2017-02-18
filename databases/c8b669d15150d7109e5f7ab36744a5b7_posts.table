@@ -1,5 +1,5 @@
 (dp1
-S'idea_id'
+S'user_id'
 p2
 (dp3
 S'length'
@@ -10,36 +10,36 @@ p5
 I00
 sS'sortable'
 p6
-I3
+I2
 sS'sql'
 p7
-S'INTEGER REFERENCES ideas (id) ON DELETE CASCADE  '
+S'INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  '
 p8
 sS'notnull'
 p9
 I00
 sS'type'
 p10
-S'reference ideas'
+S'reference auth_user'
 p11
-ssS'p_date'
+ssS'p_content'
 p12
 (dp13
 g4
-I512
+I32768
 sg5
 I00
 sg6
-I5
+I4
 sg7
-S'TIMESTAMP'
+S'TEXT'
 p14
 sg9
 I00
 sg10
-S'datetime'
+S'text'
 p15
-ssS'user_id'
+ssS'idea_id'
 p16
 (dp17
 g4
@@ -47,14 +47,14 @@ I512
 sg5
 I00
 sg6
-I2
+I3
 sg7
-S'INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  '
+S'INTEGER REFERENCES ideas (id) ON DELETE CASCADE  '
 p18
 sg9
 I00
 sg10
-S'reference auth_user'
+S'reference ideas'
 p19
 ssS'id'
 p20
@@ -71,22 +71,23 @@ p22
 sg9
 I00
 sg10
-g20
-ssS'p_content'
+S'id'
 p23
-(dp24
+ssS'p_date'
+p24
+(dp25
 g4
-I32768
+I512
 sg5
 I00
 sg6
-I4
+I5
 sg7
-S'TEXT'
-p25
+S'TIMESTAMP'
+p26
 sg9
 I00
 sg10
-S'text'
-p26
+S'datetime'
+p27
 ss.

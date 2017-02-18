@@ -111,53 +111,79 @@ auth.settings.reset_password_requires_verification = True
 
 # -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example
-#
-# >>> db.define_table('mytable', Field('myfield', 'string'))
-#
-# Fields can be 'string','text','password','integer','double','boolean'
-#       'date','time','datetime','blob','upload', 'reference TABLENAME'
-# There is an implicit 'id integer autoincrement' field
-# Consult manual for more options, validators, etc.
-#
-# More API examples for controllers:
-#
-# >>> db.mytable.insert(myfield='value')
-# >>> rows = db(db.mytable.myfield == 'value').select(db.mytable.ALL)
-# >>> for row in rows: print row.id, row.myfield
 # -------------------------------------------------------------------------
 from datetime import datetime
 
 # This table hold the data for each idea
 db.define_table('ideas',
-                Field('title', 'string'),
-                Field('description', 'text'),
+                Field('title', 'string',
+                      requires=IS_NOT_EMPTY()),
+
+                Field('description', 'text',
+                      requires=IS_NOT_EMPTY()),
+
                 Field('documents', 'upload'),
-                Field('active_idea', 'boolean', default=True),
-                Field('startdate', 'datetime', default=lambda:datetime.now()),
+
+                Field('active_idea', 'boolean',
+                      default=True),
+
+                Field('startdate', 'datetime',
+                      default=lambda:datetime.now()),
+
                 Field('enddate', 'datetime'))
 
 # This table holds the group information
 db.define_table('idea_groups',
-                Field('user_id', db.auth_user, default=auth.user_id, writable=False),
-                Field('idea_id', db.ideas),
-                Field('g_privileges', 'string', length=1))
+                Field('user_id', 'reference auth_user',
+                      default=auth.user_id,
+                      writable=False,
+                      readable=False,
+                      requires=IS_NOT_EMPTY()),
+
+                Field('idea_id', 'reference ideas',
+                      requires=IS_NOT_EMPTY()),
+
+                Field('g_privileges', 'string',
+                      length=1,
+                      writable=False,
+                      readable=False,
+                      requires=IS_NOT_EMPTY()))
 
 # This table holds the voting information
 db.define_table('votes',
-                Field('user_id', db.auth_user, default=auth.user_id),
-                Field('idea_id', db.ideas),
-                Field('vote', 'boolean'))
+                Field('user_id', 'reference auth_user',
+                      writable=False,
+                      readable=False,
+                      default=auth.user_id,
+                      requires=IS_NOT_EMPTY()),
+
+                Field('idea_id', 'reference ideas',
+                      requires=IS_NOT_EMPTY()),
+
+                # A value of True represents a vote 'for'
+                # A value of False represents a vote 'against'
+                Field('vote', 'boolean',
+                      writable=False,
+                      readable=False,
+                      requires=IS_NOT_EMPTY()))
 
 # This table holds the post data for an idea
 db.define_table('posts',
-                Field('user_id', db.auth_user, default=auth.user_id),
-                Field('idea_id', db.ideas),
+                Field('user_id', 'reference auth_user',
+                      default=auth.user_id,
+                      requires=IS_NOT_EMPTY()),
+
+                Field('idea_id', 'reference ideas',
+                      requires=IS_NOT_EMPTY()),
+
                 Field('p_content', 'text'),
-                Field('p_date', 'datetime', default=lambda:datetime.now()))
+
+                Field('p_date', 'datetime',
+                      default=lambda:datetime.now(),
+                      requires=IS_NOT_EMPTY()))
 
 # O = Owner, C=Contributor, F=Follower
 db.idea_groups.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))
-db.votes.vote.requires = IS_NOT_EMPTY()
 
 # Triggers for keeping the tables in order
 
