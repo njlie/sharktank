@@ -61,6 +61,27 @@ def call():
 def idea():
     return dict()
 
+#///////////////////////////////////////////////////////////////////////////
+def logedIn():
+    return dict()
+
+#///////////////////////////////////////////////////////////////////////////
+def buildGrid(q):
+    # don't show the export options
+    export_classes = dict(json=False, html=False,
+                          tsv=False, xml=False, csv_with_hidden_cols=False,
+                          tsv_with_hidden_cols=False)
+    # create the grid and pass it q
+    grid = SQLFORM.grid(q, csv=False, exportclasses=export_classes)
+    return dict(grid=grid)
+
+#///////////////////////////////////////////////////////////////////////////
+def ideasList():
+    q = db.ideas    # q is the ideas
+    build = buildGrid(q)    # build is the data put into sql grid
+    return dict(grid=build['grid'])
+
+#///////////////////////////////////////////////////////////////////////////
 @auth.requires_login()
 def create_idea():
     form = SQLFORM(db.ideas)
