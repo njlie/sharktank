@@ -113,3 +113,6 @@ def create_idea():
     else:
        response.flash = 'Start here to spread your idea world round.'
     return dict(form=form)
+
+def about():
+    return dict()
