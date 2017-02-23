@@ -114,8 +114,11 @@ auth.settings.reset_password_requires_verification = True
 # -------------------------------------------------------------------------
 from datetime import datetime
 
+db.define_table('category',
+                Field('categories', 'string', requires=IS_NOT_EMPTY()))
+
 # This table hold the data for each idea
-db.define_table('ideas',
+db.define_table('idea',
                 Field('title', 'string',
                       requires=IS_NOT_EMPTY()),
 
@@ -130,17 +133,20 @@ db.define_table('ideas',
                 Field('startdate', 'datetime',
                       default=lambda:datetime.now()),
 
-                Field('enddate', 'datetime'))
+                Field('enddate', 'datetime'),
+
+                Field('category', 'reference category',
+                      requires=IS_IN_DB(db, 'category.id', '%(categories)s')))
 
 # This table holds the group information
-db.define_table('idea_groups',
+db.define_table('idea_group',
                 Field('user_id', 'reference auth_user',
                       default=auth.user_id,
                       writable=False,
                       readable=False,
                       requires=IS_NOT_EMPTY()),
 
-                Field('idea_id', 'reference ideas',
+                Field('idea_id', 'reference idea',
                       requires=IS_NOT_EMPTY()),
 
                 Field('g_privileges', 'string',
@@ -150,14 +156,14 @@ db.define_table('idea_groups',
                       requires=IS_NOT_EMPTY()))
 
 # This table holds the voting information
-db.define_table('votes',
+db.define_table('vote',
                 Field('user_id', 'reference auth_user',
                       writable=False,
                       readable=False,
                       default=auth.user_id,
                       requires=IS_NOT_EMPTY()),
 
-                Field('idea_id', 'reference ideas',
+                Field('idea_id', 'reference idea',
                       requires=IS_NOT_EMPTY()),
 
                 # A value of True represents a vote 'for'
@@ -168,12 +174,12 @@ db.define_table('votes',
                       requires=IS_NOT_EMPTY()))
 
 # This table holds the post data for an idea
-db.define_table('posts',
+db.define_table('post',
                 Field('user_id', 'reference auth_user',
                       default=auth.user_id,
                       requires=IS_NOT_EMPTY()),
 
-                Field('idea_id', 'reference ideas',
+                Field('idea_id', 'reference idea',
                       requires=IS_NOT_EMPTY()),
 
                 Field('p_content', 'text'),
@@ -183,27 +189,9 @@ db.define_table('posts',
                       requires=IS_NOT_EMPTY()))
 
 # O = Owner, C=Contributor, F=Follower
-db.idea_groups.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))
-
-# Triggers for keeping the tables in order
-
-# Creates a group associated with the idea and assigns the user as the owner
+db.idea_group.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))
 
 
-#def get_id():
-#    max = db.ideas.id.max()
-##    print "Appending"
-#    db.idea_groups.insert(user_id=auth.user,
-#                          idea_id=int(db().select(max)[0][max]),
-#                          g_privileges='O')
-
-
-#db.ideas._after_insert.append(
-#    db.idea_groups.insert(user_id=auth.user,
-#                          idea_id=int(db().select(
-#                              db.ideas.id.max())[0][db.ideas.id.max()]),
-#                          g_privileges='O')
-#)
 
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing

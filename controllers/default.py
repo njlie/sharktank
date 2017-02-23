@@ -77,14 +77,14 @@ def buildGrid(q):
 
 #///////////////////////////////////////////////////////////////////////////
 def ideasList():
-    q = db.ideas    # q is the ideas
+    q = db.idea    # q is the ideas
     build = buildGrid(q)    # build is the data put into sql grid
     return dict(grid=build['grid'])
 
 #///////////////////////////////////////////////////////////////////////////
 @auth.requires_login()
 def create_idea():
-    form = SQLFORM(db.ideas)
+    form = SQLFORM(db.idea)
     form.process()
     if form.accepted:
 
@@ -92,10 +92,10 @@ def create_idea():
        # These lines generate the group associated with the idea, adds the creator of the idea
        # as the owner, and dumps it in to the db.
 
-       try_by_user_groups= db(db.idea_groups.user_id==auth.user_id).select(
-           db.idea_groups.idea_id.max())[0][db.idea_groups.idea_id.max()]
+       try_by_user_groups= db(db.idea_group.user_id==auth.user_id).select(
+           db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
 
-       failsafe = db().select(db.idea_groups.idea_id.max())[0][db.idea_groups.idea_id.max()]
+       failsafe = db().select(db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
 
        if try_by_user_groups:
            idea_id=int(try_by_user_groups) + 1
@@ -104,7 +104,7 @@ def create_idea():
        else:
            idea_id = 1
 
-       db.idea_groups.insert(g_privileges='O', idea_id=idea_id)
+       db.idea_group.insert(g_privileges='O', idea_id=idea_id)
 
        response.view = 'default/index.html'
        response.flash = 'Idea Processed'
