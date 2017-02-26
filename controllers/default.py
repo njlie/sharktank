@@ -116,3 +116,11 @@ def create_idea():
 
 def about():
     return dict()
+
+def test():
+    ideas=db().select(db.idea.category).as_list()
+    return dict(ideas=ideas)
+
+def get_data():
+    custdata = db.executesql(qry, as_dict=True)
+    return response.json(custdata)

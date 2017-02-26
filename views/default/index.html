@@ -1,41 +1,51 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="../static/js/chart.js"></script>
+</head>
 
 <h2>Login</h2>
 <form enctype="multipart/form-data"
       action="{{=URL()}}" method="post">
-Email:
-<input email="email" />
-Password:
-<input password="password" />
-<input type="submit" value="Login" />
-<input type="submit" value="Signup" />
+    Email:
+    <input email="email"/>
+    Password:
+    <input password="password"/>
+    <input type="submit" value="Login"/>
+    <input type="submit" value="Signup"/>
 </form>
 
 {{block header}}
-    <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        {{if response.title:}}
+<header class="container-fluid background">
+    <div class="jumbotron text-center">
+    {{if response.title:}}
         <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
-      </div>
-    </header>
+            <small>{{=response.subtitle or ''}}</small>
+        </h1>
+    {{pass}}
+    </div>
+</header>
 {{end}}
 
 
 {{block right_sidebar}}
 <div class="panel panel-info">
-  <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
-      href="{{=URL('admin','default','index')}}">
-      <i class="glyphicon glyphicon-cog"></i>
-      {{=T("admin")}}
+    <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
+                                                          href="{{=URL('admin','default','index')}}">
+        <i class="glyphicon glyphicon-cog"></i>
+    {{=T("admin")}}
     </a></h3></div>
-  <div class="panel-body">
+    <div class="panel-body">
     {{=T("Here are some helpful links.")}}
-  </div>
-  <ul class="list-group">
-    <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
-  </ul>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
+    </ul>
 </div>
 {{end}}
+
+<br>
+<body>
+<div id="piechart" style="width: 900px; height: 500px;"></div>
+</body>
