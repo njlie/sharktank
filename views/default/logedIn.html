@@ -1,4 +1,5 @@
 {{extend 'layout.html'}}
+
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
          <div class="item">
             <div style="text-align: center;"><img src="../static/images/shark_bg.jpg" height = "200" width = "800"/></div>
@@ -6,11 +7,7 @@
       </div>
       <div class="container text-center">
          <br>
-<<<<<<< HEAD
-         <h3>Your Loged in! {{=db.auth_user[auth.user_id].first_name}}</h3>
-=======
          <h3>Welcome, {{=db.auth_user[auth.user_id].first_name}}!</h3>
->>>>>>> ljrocha_work
       </div>
       <div class="container text-center">
          <button type="button">About</button>
