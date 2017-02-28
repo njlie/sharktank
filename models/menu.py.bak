@@ -28,16 +28,10 @@ response.google_analytics_id = None
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-<<<<<<< HEAD
-    (T('Home'), False, URL('default', 'index'), []),
-    (T('About'), False, URL('default', 'about'), []),
-    (T('Ideas'), False, URL('default', 'ideasList', []))
-=======
     (T('Intro'), False, URL('default', 'index'), []),
     (T('Home'), False, URL('default', 'logedIn'), []),
     (T('Pitch Idea'), False, URL('default', 'create_idea'), []),
     (T('Idea Tank'), False, URL('default', 'ideasList'), [])
->>>>>>> ljrocha_work
 ]
 
 DEVELOPMENT_MENU = True

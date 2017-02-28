@@ -6,11 +6,7 @@
       </div>
       <div class="container text-center">
          <br>
-<<<<<<< HEAD
-         <h3>Your Loged in! {{=db.auth_user[auth.user_id].first_name}}</h3>
-=======
          <h3>Welcome, {{=db.auth_user[auth.user_id].first_name}}!</h3>
->>>>>>> ljrocha_work
       </div>
       <div class="container text-center">
          <button type="button">About</button>
