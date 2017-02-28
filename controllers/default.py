@@ -19,8 +19,6 @@ def index():
     """
     return dict()
 
-
-
 def user():
     """
     exposes:
@@ -62,6 +60,7 @@ def idea():
     return dict()
 
 #///////////////////////////////////////////////////////////////////////////
+@auth.requires_login()
 def logedIn():
     return dict()
 

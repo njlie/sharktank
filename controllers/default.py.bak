@@ -55,3 +55,71 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+def idea():
+    return dict()
+
+#///////////////////////////////////////////////////////////////////////////
+@auth.requires_login()
+def logedIn():
+    return dict()
+
+#///////////////////////////////////////////////////////////////////////////
+def buildGrid(q):
+    # don't show the export options
+    export_classes = dict(json=False, html=False,
+                          tsv=False, xml=False, csv_with_hidden_cols=False,
+                          tsv_with_hidden_cols=False)
+    # create the grid and pass it q
+    grid = SQLFORM.grid(q, csv=False, exportclasses=export_classes)
+    return dict(grid=grid)
+
+#///////////////////////////////////////////////////////////////////////////
+def ideasList():
+    q = db.idea    # q is the ideas
+    build = buildGrid(q)    # build is the data put into sql grid
+    return dict(grid=build['grid'])
+
+#///////////////////////////////////////////////////////////////////////////
+@auth.requires_login()
+def create_idea():
+    form = SQLFORM(db.idea)
+    form.process()
+    if form.accepted:
+
+       # The following lines MUST be included when processing an idea in to the database.
+       # These lines generate the group associated with the idea, adds the creator of the idea
+       # as the owner, and dumps it in to the db.
+
+       try_by_user_groups= db(db.idea_group.user_id==auth.user_id).select(
+           db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
+
+       failsafe = db().select(db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
+
+       if try_by_user_groups:
+           idea_id=int(try_by_user_groups) + 1
+       elif failsafe:
+           idea_id = int(failsafe) + 1
+       else:
+           idea_id = 1
+
+       db.idea_group.insert(g_privileges='O', idea_id=idea_id)
+
+       response.view = 'default/index.html'
+       response.flash = 'Idea Processed'
+    elif form.errors:
+       response.flash = 'Woops! Something is wrong.'
+    else:
+       response.flash = 'Start here to spread your idea world round.'
+    return dict(form=form)
+
+def about():
+    return dict()
+
+def test():
+    ideas=db().select(db.idea.category).as_list()
+    return dict(ideas=ideas)
+
+def get_data():
+    custdata = db.executesql(qry, as_dict=True)
+    return response.json(custdata)
