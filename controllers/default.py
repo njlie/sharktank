@@ -35,6 +35,9 @@ def user():
     to decorate functions that need access control
     also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users
     """
+    if request.args(0) == 'profile':
+        #response.view = 'default/logedIn.html'
+        redirect(URL('logedIn'))
     return dict(form=auth())
 
 
