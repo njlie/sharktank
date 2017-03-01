@@ -67,36 +67,16 @@ def idea():
 def logedIn():
     return dict()
 
-#///////////////////////////////////////////////////////////////////////////
-def buildGrid(q, edit):
-    # don't show the export options
-    export_classes = dict(json=False, html=False,
-                          tsv=False, xml=False, csv_with_hidden_cols=False,
-                          tsv_with_hidden_cols=False)
-    # create the grid and pass it q
-    if edit is True:
-        # This is entered if the user should be able to edit the item
-        grid = SQLFORM.grid(q,
-                            csv=False,
-                            exportclasses=export_classes,
-                            create=False,
-                            user_signature=False)
-
-    elif edit is False:
-        # The else clause is hit when the user should not be able to edit the item
-        grid = SQLFORM.grid(q,
-                            csv=False,
-                            exportclasses=export_classes,
-                            editable=False, deletable=False, create=False,
-                            user_signature=False)
-    #grid = SQLFORM.grid(q, csv=False, exportclasses=export_classes)
-    return dict(grid=grid)
+# /////////////////////////////////////////////////////////////////////////
+def showIdea():
+    post = db.idea(request.args(0, cast=int))
+    return dict(post=post)
 
 #///////////////////////////////////////////////////////////////////////////
 def ideasList():
-    q = db.idea    # q is the ideas
-    build = buildGrid(q, False)    # build is the data put into sql grid
-    return dict(grid=build['grid'])
+    rows = db(db.idea).select()
+    #joinRows = db(db.idea.id == db.idea_group.id).select() # tryed to do join to give user option to edit
+    return dict(rows=rows)
 
 #///////////////////////////////////////////////////////////////////////////
 @auth.requires_login()

@@ -1,3 +1,20 @@
 {{extend 'layout.html'}}
 <h2>Idea Tank</h2>
-{{=grid}}
+
+<table class="table">
+    {{for p in rows:}}
+    <tr>
+        <!--<td>Idea: {{=p.title}}</td> -->
+        <td><a href="{{=URL('showIdea',args=p.id)}}">{{=p.title}}</a></td>
+        <td>Created on: {{=p.startdate}}</td>
+        <td>Ends on: {{=p.enddate}}</td>
+        <td>{{=p.enddate}}</td>
+
+        <!--{#{if auth.user == user_id:  and joinRows.privileges == 'O': }}
+      <a href="{#{=URL('default', 'edit', args=[p.id])}}">
+      edit
+      </a>-->
+
+    </tr>
+    {{pass}}
+</table>
