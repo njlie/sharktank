@@ -6,7 +6,7 @@ $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     jQuery('#my-tank-link').css("border-right-style", "none");
     jQuery('#my-tank-link').css("background-color", "lightgray");
-    jQuery('my-tank').show();
+    jQuery('#my-tank').show();
 });
 
 function show(s){
