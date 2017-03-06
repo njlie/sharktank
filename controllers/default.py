@@ -68,14 +68,19 @@ def logedIn():
     return dict()
 
 # /////////////////////////////////////////////////////////////////////////
+"""""""""
+have no idea why this is not working, getting an error when I push " table remark already exists "
+works with this commented out, trying to set up comment feature for the ideas
+"""""""""
 def showIdea():
     post = db.idea(request.args(0, cast=int))  # this is the idea
-    db.remark.idea_id.default = post.id  # set the idea id of the comments to the post id
-    form = SQLFORM(db.remark)  # this is the form for filling out a comment
-    if form.process().accepted:  # if the comment is valid
-        response.flash = 'your comment is posted'
-    comments = db(db.remark.idea_id == post.id).select()  # the comments that are associated with that idea
-    return dict(post=post, form=form, comments=comments)
+    #db.remark.idea_id.default = post.id  # set the idea id of the comments to the post id
+    #form = SQLFORM(db.remark)  # this is the form for filling out a comment
+    #if form.process().accepted:  # if the comment is valid
+        #response.flash = 'your comment is posted'
+    #comments = db(db.remark.idea_id == post.id).select()  # the comments that are associated with that idea
+    #return dict(post=post, form=form, comments=comments)
+    return dict(post=post)
 #///////////////////////////////////////////////////////////////////////////
 def ideasList():
     rows = db(db.idea).select()     # select the ideas

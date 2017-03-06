@@ -189,7 +189,9 @@ db.define_table('post',
                       default=lambda:datetime.now(),
                       requires=IS_NOT_EMPTY()))
 
-
+"""""""""""
+have no idea why this is not working, getting an error when I push " table remark already exists "
+works with this commented out
 # //////////////////////////////////////////////////////////////////////////////////////////////
 # this table is for posting comments on an idea view
 db.define_table('remark',
@@ -209,7 +211,7 @@ db.remark.author.default = get_author()   # get the name of the user making the 
 db.remark.author.writable = False   # can't change the id
 db.remark.author.readable = False
 # //////////////////////////////////////////////////////////////////////////////////////////////
-
+"""""""""
 
 # O = Owner, C=Contributor, F=Follower
 db.idea_group.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))

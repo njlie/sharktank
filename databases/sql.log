@@ -333,3 +333,10 @@ CREATE TABLE remark(
     body TEXT
 );
 success!
+timestamp: 2017-03-05T17:20:12.219446
+CREATE TABLE remark(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
