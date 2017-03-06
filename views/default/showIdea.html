@@ -11,8 +11,22 @@
 {{if post.documents:}}
     <img width="400" src="{{=URL('default', 'download', args=post.documents)}}" />
 {{pass}}
-
-
+<h2>what others are saying</h2>
+{{if len(comments):}}
+    <h2>Comments</h2>
+    {{for post in comments:}}
+        <p><i>{{=post.author}}</i> :  {{=post.body}}</p>
+    {{pass}}
+{{else:}}
+<h5>be the first comment</h5>
+{{pass}}
+{{if auth.user_id:}}
+    <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
+    <h5>Leave a comment</h5>
+    {{=form}}
+{{else:}}
+    <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
+{{pass}}
 
 
 

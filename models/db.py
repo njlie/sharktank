@@ -189,6 +189,28 @@ db.define_table('post',
                       default=lambda:datetime.now(),
                       requires=IS_NOT_EMPTY()))
 
+
+# //////////////////////////////////////////////////////////////////////////////////////////////
+# this table is for posting comments on an idea view
+db.define_table('remark',
+                Field('idea_id', 'reference idea'),
+                Field('author'),
+                Field('body', 'text')
+                )
+
+def get_author():
+    author = 'none'
+    if auth.user:
+        author = auth.user.first_name  # set the name to who ever is loged in
+    return author
+
+db.remark.idea_id.writable = db.remark.idea_id.readable = False
+db.remark.author.default = get_author()   # get the name of the user making the post and use that
+db.remark.author.writable = False   # can't change the id
+db.remark.author.readable = False
+# //////////////////////////////////////////////////////////////////////////////////////////////
+
+
 # O = Owner, C=Contributor, F=Follower
 db.idea_group.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))
 

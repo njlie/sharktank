@@ -295,3 +295,41 @@ CREATE TABLE comm(
     author CHAR(512),
     body TEXT
 );
+timestamp: 2017-03-05T17:04:10.412080
+CREATE TABLE comm(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
+timestamp: 2017-03-05T17:04:12.177615
+CREATE TABLE comm(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
+timestamp: 2017-03-05T17:05:03.342773
+CREATE TABLE theComm(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
+success!
+timestamp: 2017-03-05T17:07:31.672813
+CREATE TABLE com(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
+success!
+timestamp: 2017-03-05T17:09:02.735665
+CREATE TABLE remark(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
+success!
