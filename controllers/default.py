@@ -69,13 +69,8 @@ def logedIn():
 
 # /////////////////////////////////////////////////////////////////////////
 def showIdea():
-    post = db.idea(request.args(0, cast=int))   # this is the idea
-    db.comm.idea_id.default = post.id       # set the idea id of the comments to the post id
-    form = SQLFORM(db.comm)     # this is the form for filling out a comment
-    if form.process().accepted:     # if the comment is valid
-        response.flash = 'your comment is posted'
-    comments = db(db.comm.idea_id == post.id).select()  # the comments that are associated with that idea
-    return dict(post=post, form=form, comments=comments)
+    post = db.idea(request.args(0, cast=int))  # this is the idea
+    return dict(post=post)
 
 #///////////////////////////////////////////////////////////////////////////
 def ideasList():
