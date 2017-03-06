@@ -340,3 +340,6 @@ CREATE TABLE remark(
     author CHAR(512),
     body TEXT
 );
+timestamp: 2017-03-06T02:05:23.762871
+ALTER TABLE post ADD author CHAR(512);
+success!

@@ -185,20 +185,11 @@ db.define_table('post',
 
                 Field('p_content', 'text'),
 
+                Field('author'),
+
                 Field('p_date', 'datetime',
                       default=lambda:datetime.now(),
                       requires=IS_NOT_EMPTY()))
-
-"""""""""""
-have no idea why this is not working, getting an error when I push " table remark already exists "
-works with this commented out
-# //////////////////////////////////////////////////////////////////////////////////////////////
-# this table is for posting comments on an idea view
-db.define_table('remark',
-                Field('idea_id', 'reference idea'),
-                Field('author'),
-                Field('body', 'text')
-                )
 
 def get_author():
     author = 'none'
@@ -206,12 +197,12 @@ def get_author():
         author = auth.user.first_name  # set the name to who ever is loged in
     return author
 
-db.remark.idea_id.writable = db.remark.idea_id.readable = False
-db.remark.author.default = get_author()   # get the name of the user making the post and use that
-db.remark.author.writable = False   # can't change the id
-db.remark.author.readable = False
-# //////////////////////////////////////////////////////////////////////////////////////////////
-"""""""""
+db.post.idea_id.writable = db.post.idea_id.readable = False
+db.post.user_id.writable = db.post.user_id.readable = False
+db.post.p_date.writable = db.post.p_date.readable = False
+db.post.author.default = get_author()
+db.post.author.writable = False   # can't change the id
+db.post.author.readable = False
 
 # O = Owner, C=Contributor, F=Follower
 db.idea_group.g_privileges.requires = IS_IN_SET(('O', 'C', 'F'))
