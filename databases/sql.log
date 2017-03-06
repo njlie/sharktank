@@ -119,3 +119,11 @@ CREATE TABLE idea(
     category INTEGER REFERENCES category (id) ON DELETE CASCADE  
 );
 success!
+timestamp: 2017-03-05T14:54:58.419886
+CREATE TABLE comm(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ,
+    author CHAR(512),
+    body TEXT
+);
+success!

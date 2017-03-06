@@ -1,9 +1,33 @@
 {{extend 'layout.html'}}
 <h2>{{=post.title}}</h2>
-<h4>category: {{=post.category}}</h4>
 <h4>{{=post.description}}</h4>
 <h4>startdate: {{=post.startdate}}</h4>
 <h4>Enddate: {{=post.enddate}}</h4>
-<h4>active: {{=post.active_idea}}</h4>
-<h4>documents: {{=post.documents}}</h4>
+{{if  post.active_idea:}}
+    <h4>Active Idea</h4>
+{{else:}}
+    <h4>Inactive</h4>
+{{pass}}
+{{if post.documents:}}
+    <img width="400" src="{{=URL('default', 'download', args=post.documents)}}" />
+{{pass}}
+<h2>what others are saying</h2>
+{{if len(comments):}}
+    <h2>Comments</h2>
+    {{for post in comments:}}
+        <p><i>{{=post.author}}</i> :  {{=post.body}}</p>
+    {{pass}}
+{{else:}}
+<h5>be the first comment</h5>
+{{pass}}
+{{if auth.user_id:}}
+    <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
+    <h5>Leave a comment</h5>
+    {{=form}}
+{{else:}}
+    <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
+{{pass}}
+
+
+
 
