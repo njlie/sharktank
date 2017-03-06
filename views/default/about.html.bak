@@ -1,7 +1,0 @@
-{{extend 'layout.html'}}
-        <h3>Have you ever had an idea and wondered if it was good?</h3>
-<h3>Welcome to SharkTank. A crowd sourcing platform where people can create and </h3>
-<h3>expand on great ideas, or get eaten up in the abyss where bad ideas go to die.</h3>
-<h3>There is no cage, chain-mail wetsuits or any kind of weaponery.</h3>
-<h3>There is just you, an idea, sharks and a shit-ton of chum in the water.</h3>
-<h3>So dive in or get fucked.</h3>
