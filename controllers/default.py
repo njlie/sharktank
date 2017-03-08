@@ -17,6 +17,11 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
+    csv = exportIdeas()
+    print csv
+    csv.sort()
+    print 'csv '
+    print csv
     return dict()
 
 def user():
@@ -37,7 +42,8 @@ def user():
     """
     if request.args(0) == 'profile':
         #response.view = 'default/logedIn.html'
-        redirect(URL('logedIn'))
+        #redirect(URL('logedIn'))
+        redirect(URL('workbench'))
     return dict(form=auth())
 
 
@@ -136,3 +142,16 @@ def workbench():
                 (db.idea_group.user_id==auth.user_id) &
                 (db.idea_group.g_privileges == 'O')).select(db.idea.title)
     return dict(my_tank_rows=my_tank_rows)
+
+def listGroups():
+    form = SQLFORM(db.idea_group)
+    form.process()
+
+def exportIdeas():
+    rows = db(db.idea).select()
+    arr = []
+    for row in rows:
+        arr.append(int(row.category))
+
+    return (arr)
+
