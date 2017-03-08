@@ -1,4 +1,9 @@
 {{extend 'layout.html'}}
+<style>
+   .glyphicon {
+    font-size: 40px;
+    }
+</style>
 <h2>{{=thePost.title}}</h2>
 <h4>{{=thePost.description}}</h4>
 <h4>startdate: {{=thePost.startdate}}</h4>
@@ -13,6 +18,19 @@
 {{pass}}
 
 <h2>what others are saying</h2>
+
+{{if auth.user_id:}}
+    <div>
+        <a><span class="glyphicon glyphicon-thumbs-up"></span></a>
+        <a><span class="glyphicon glyphicon-thumbs-down"></span></a>
+    </div>
+{{else:}}
+    <div>
+        <a> <span class="glyphicon glyphicon-thumbs-up"></span></a>
+        <a> <span class="glyphicon glyphicon-thumbs-down"></span></a>
+    </div>
+{{pass}}
+
 {{if len(comments):}}
     <h2>Comments</h2>
     {{for post in comments:}}
