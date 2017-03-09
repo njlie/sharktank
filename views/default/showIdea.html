@@ -43,6 +43,7 @@
     <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
     <h5>Leave a comment</h5>
     {{=form}}
+    <a href="{{=URL('showGroupMembers', args=thePost.id)}}" type="button"> Connect With Group</a><br/>
 {{else:}}
     <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
 {{pass}}
