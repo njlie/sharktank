@@ -25,6 +25,7 @@ def index():
     groups = listGroups()
     return dict(groups=groups)
 
+
 def user():
     """
     exposes:
@@ -42,8 +43,8 @@ def user():
     also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users
     """
     if request.args(0) == 'profile':
-        #response.view = 'default/logedIn.html'
-        #redirect(URL('logedIn'))
+        # response.view = 'default/logedIn.html'
+        # redirect(URL('logedIn'))
         redirect(URL('workbench'))
     return dict(form=auth())
 
@@ -66,13 +67,16 @@ def call():
     """
     return service()
 
+
 def idea():
     return dict()
 
-#///////////////////////////////////////////////////////////////////////////
+
+# ///////////////////////////////////////////////////////////////////////////
 @auth.requires_login()
 def logedIn():
     return dict()
+
 
 # /////////////////////////////////////////////////////////////////////////
 def showIdea():
@@ -83,92 +87,95 @@ def showIdea():
         response.flash = 'your comment is posted'
     comments = db(db.post.idea_id == thePost.id).select()  # the comments that are associated with that idea
 
-    vote = db(db.vote).select() 
+    vote = db(db.vote).select()
 
     return dict(thePost=thePost, form=form, comments=comments, vote=vote)
 
-#///////////////////////////////////////////////////////////////////////////
+
+# ///////////////////////////////////////////////////////////////////////////
 def ideasList():
-    rows = db(db.idea).select()     # select the ideas
+    rows = db(db.idea).select()  # select the ideas
     return dict(rows=rows)
 
-#///////////////////////////////////////////////////////////////////////////
+
+# ///////////////////////////////////////////////////////////////////////////
 @auth.requires_login()
 def create_idea():
     form = SQLFORM(db.idea)
     form.process()
     if form.accepted:
 
-       # The following lines MUST be included when processing an idea in to the database.
-       # These lines generate the group associated with the idea, adds the creator of the idea
-       # as the owner, and dumps it in to the db.
+        # The following lines MUST be included when processing an idea in to the database.
+        # These lines generate the group associated with the idea, adds the creator of the idea
+        # as the owner, and dumps it in to the db.
 
-       try_by_user_groups= db(db.idea_group.user_id==auth.user_id).select(
-           db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
+        try_by_user_groups = db(db.idea_group.user_id == auth.user_id).select(
+            db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
 
-       failsafe = db().select(db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
+        failsafe = db().select(db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
 
-       if try_by_user_groups:
-           idea_id=int(try_by_user_groups) + 1
-       elif failsafe:
-           idea_id = int(failsafe) + 1
-       else:
-           idea_id = 1
+        if try_by_user_groups:
+            idea_id = int(try_by_user_groups) + 1
+        elif failsafe:
+            idea_id = int(failsafe) + 1
+        else:
+            idea_id = 1
 
-       db.idea_group.insert(g_privileges='O', idea_id=idea_id)
+        db.idea_group.insert(g_privileges='O', idea_id=idea_id)
 
-       response.view = 'default/index.html'
-       response.flash = 'Idea Processed'
+        response.view = 'default/index.html'
+        response.flash = 'Idea Processed'
     elif form.errors:
-       response.flash = 'Woops! Something is wrong.'
+        response.flash = 'Woops! Something is wrong.'
     else:
-       response.flash = 'Start here to spread your idea world round.'
+        response.flash = 'Start here to spread your idea world round.'
     return dict(form=form)
+
 
 def about():
     return dict()
 
+
 def test():
-    ideas=db().select(db.idea.category).as_list()
+    ideas = db().select(db.idea.category).as_list()
     return dict(ideas=ideas)
+
 
 def get_data():
     custdata = db.executesql(qry, as_dict=True)
     return response.json(custdata)
 
+
 @auth.requires_login()
 def workbench():
-    #sumUpVote = db().select(db.vote.vote=='True').sum()
-    #sumDownVote = db().select(db.vote.vote=='False').sum()
+    # sumUpVote = db().select(db.vote.vote=='True').sum()
+    # sumDownVote = db().select(db.vote.vote=='False').sum()
     response.files.append(URL('static', 'js/workbench.js'))
     response.files.append(URL('static', 'css/workbench.css'))
-    my_tank_rows = db((db.idea_group.idea_id==db.idea.id) &
-                (db.idea_group.user_id==auth.user_id) &
-                (db.idea_group.g_privileges == 'O')).select(db.idea.title)
+    my_tank_rows = db((db.idea_group.idea_id == db.idea.id) &
+                      (db.idea_group.user_id == auth.user_id) &
+                      (db.idea_group.g_privileges == 'O')).select(db.idea.title)
     return dict(my_tank_rows=my_tank_rows)
 
-def listGroups():
-    rows = db(db.idea_group.id == db.idea.id).select()
-
-    return ()
 
 def showGroupMembers():
-    group = listGroups()
     post = db.post[request.args(0)]
     print 'post '
     print post.idea_id
+    id = int(post.idea_id)
     rows = db((db.idea_group.user_id == db.auth_user.id) &
               (db.idea_group.idea_id == post)).select(
-	db.auth_user.first_name,
-	db.auth_user.last_name,
-    db.auth_user.email,
-	db.idea_group.g_privileges,
-	db.idea_group.idea_id
-)
+        db.auth_user.first_name,
+        db.auth_user.last_name,
+        db.auth_user.email,
+        db.idea_group.g_privileges,
+        db.idea_group.idea_id
+    )
     for row in rows:
         print rows
 
-    return dict(rows=rows)
+    return dict(rows=rows, id=id, post=post)
+
 
 def exportIdeas():
     rows = db(db.idea).select()
@@ -176,4 +183,3 @@ def exportIdeas():
     for row in rows:
         arr.append(int(row.category))
     return (arr)
-
