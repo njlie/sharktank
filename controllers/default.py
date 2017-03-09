@@ -22,7 +22,8 @@ def index():
     csv.sort()
     print 'csv '
     print csv
-    return dict()
+    groups = listGroups()
+    return dict(groups=groups)
 
 def user():
     """
@@ -144,14 +145,32 @@ def workbench():
     return dict(my_tank_rows=my_tank_rows)
 
 def listGroups():
-    form = SQLFORM(db.idea_group)
-    form.process()
+    rows = db(db.idea_group.id == db.idea.id).select()
+
+    return ()
+
+def showGroupMembers():
+    group = listGroups()
+    post = db.post[request.args(0)]
+    print 'post '
+    print post.idea_id
+    rows = db((db.idea_group.user_id == db.auth_user.id) &
+              (db.idea_group.idea_id == post)).select(
+	db.auth_user.first_name,
+	db.auth_user.last_name,
+    db.auth_user.email,
+	db.idea_group.g_privileges,
+	db.idea_group.idea_id
+)
+    for row in rows:
+        print rows
+
+    return dict(rows=rows)
 
 def exportIdeas():
     rows = db(db.idea).select()
     arr = []
     for row in rows:
         arr.append(int(row.category))
-
     return (arr)
 
