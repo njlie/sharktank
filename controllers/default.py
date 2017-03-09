@@ -17,7 +17,13 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    return dict()
+    csv = exportIdeas()
+    print csv
+    csv.sort()
+    print 'csv '
+    print csv
+    groups = listGroups()
+    return dict(groups=groups)
 
 def user():
     """
@@ -37,7 +43,8 @@ def user():
     """
     if request.args(0) == 'profile':
         #response.view = 'default/logedIn.html'
-        redirect(URL('logedIn'))
+        #redirect(URL('logedIn'))
+        redirect(URL('workbench'))
     return dict(form=auth())
 
 
@@ -139,3 +146,34 @@ def workbench():
                 (db.idea_group.user_id==auth.user_id) &
                 (db.idea_group.g_privileges == 'O')).select(db.idea.title)
     return dict(my_tank_rows=my_tank_rows)
+
+def listGroups():
+    rows = db(db.idea_group.id == db.idea.id).select()
+
+    return ()
+
+def showGroupMembers():
+    group = listGroups()
+    post = db.post[request.args(0)]
+    print 'post '
+    print post.idea_id
+    rows = db((db.idea_group.user_id == db.auth_user.id) &
+              (db.idea_group.idea_id == post)).select(
+	db.auth_user.first_name,
+	db.auth_user.last_name,
+    db.auth_user.email,
+	db.idea_group.g_privileges,
+	db.idea_group.idea_id
+)
+    for row in rows:
+        print rows
+
+    return dict(rows=rows)
+
+def exportIdeas():
+    rows = db(db.idea).select()
+    arr = []
+    for row in rows:
+        arr.append(int(row.category))
+    return (arr)
+

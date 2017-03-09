@@ -1,0 +1,23 @@
+{{extend 'layout.html'}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Group Member details</h2>
+<table class="table">
+{{=TR(TH(T('First Name')),TH(T('Last Name')),TH(T('Email')))}}
+{{for row in rows:}}
+    <tr>
+    {{=TD(T(str(row.auth_user.first_name)))}}
+    {{=TD(T(str(row.auth_user.last_name)))}}
+    {{=TD(T(str(row.auth_user.email)))}}
+    </tr>
+{{pass}}
+</table>
+<a href="../ideasList.html}" type="button">Back to Ideas</a>
+</body>
+</html>

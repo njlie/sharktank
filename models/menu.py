@@ -30,6 +30,7 @@ response.google_analytics_id = None
 response.menu = [
     (T('Intro'), False, URL('default', 'index'), []),
     (T('Home'), False, URL('default', 'logedIn'), []),
+    (T('Workbench'), False, URL('default', 'workbench'), []),
     (T('Pitch Idea'), False, URL('default', 'create_idea'), []),
     (T('Idea Tank'), False, URL('default', 'ideasList'), [])
 ]
