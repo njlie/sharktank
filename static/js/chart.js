@@ -20,7 +20,9 @@ function drawChart() {
     ]);
 
     var options = {
-        title: 'Spread of current Ideas'
+        'title': 'Spread of ideas',
+        'backgroundColor': 'grey',
+        'is3D': true
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));

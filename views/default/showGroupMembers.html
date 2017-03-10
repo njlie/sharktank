@@ -3,10 +3,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .btn {
+      background: #cc5e00;
+      color: #ffffff;
+      }
+    </style>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body class='wb-body'>
 <h2>Group Member details</h2>
 <table class="table">
 {{=TR(TH(T('First Name')),TH(T('Last Name')),TH(T('Email')))}}
@@ -18,6 +24,6 @@
     </tr>
 {{pass}}
 </table>
-<a href="{{=URL('showIdea', args=request.args(0))}}" type="button"> <- Back to Idea</a><br/>
+<div><a class="btn" href="{{=URL('showIdea', args=request.args(0))}}">Back to Idea</a></div>
 </body>
 </html>
