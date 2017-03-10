@@ -166,3 +166,21 @@ def exportIdeas():
     for row in rows:
         arr.append(int(row.category))
     return (arr)
+
+@auth.requires_login()
+def workbench():
+
+    #sumUpVote = db().select(db.vote.vote=='True').sum()
+    #sumDownVote = db().select(db.vote.vote=='False').sum()
+
+    bg_url = 'background-image:url(' + str(URL('static', 'images/shark_bg.jpg')) + ')'
+
+    response.files.append(URL('static', 'js/workbench.js'))
+    response.files.append(URL('static', 'css/workbench.css'))
+    my_tank_rows = db((db.idea_group.idea_id==db.idea.id) &
+                (db.idea_group.user_id==auth.user_id) &
+                (db.idea_group.g_privileges == 'O')).select(db.idea.title)
+    ideas = ''
+    for row in my_tank_rows:
+        ideas += str(LI(row.title))
+    return dict(ideas=ideas, bg_url=bg_url)

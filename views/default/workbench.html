@@ -1,0 +1,82 @@
+{{extend 'layout.html'}}
+{{=BODY(
+    DIV(
+        ## Side bar start ##
+        DIV(
+            DIV(
+                SPAN( _class="glyphicon glyphicon-check sidebar_glyphicon"),
+                _class="inner top_left", _title="Show My Ideas",
+                _id="my-tank-link", _onclick="show('#my-tank')"
+            ),
+            DIV(
+                SPAN( _class="glyphicon glyphicon-screenshot sidebar_glyphicon"),
+                _class="inner", _title="Show Ideas I Contribute To",
+                _id="my-contrib-link", _onclick="show('#my-contrib')"
+            ),
+            DIV(
+                SPAN( _class="glyphicon glyphicon-thumbs-up sidebar_glyphicon"),
+                _class="inner", _title="Show Ideas I Follow",
+                _id="my-follow-link", _onclick="show('#my-follow')"
+            ),
+            DIV(
+                SPAN( _class="glyphicon glyphicon-lock sidebar_glyphicon"),
+                _class="inner", _title="Edit Profile",
+                _id="my-profile-link", _onclick="show('#my-profile')"
+            ),
+            _class="wb_sidebar"
+        ),
+        ## Side bar end ##
+
+        ## Pages ##
+        DIV(DIV(
+            DIV(T('My Tank'),_class="ribbon-green"),
+                _class="ribbon-wrapper-green",),
+            H3(T('My Tank')),
+            ## Insert My Tank page html between these comment tags ##
+
+            T('This will contain all of my ideas.'),
+            XML(ideas),
+
+            # End #
+            _class="wrapper nav-window", _id="my-tank", _style="display: inline"
+        ),
+
+        DIV(DIV(
+            DIV(T('My Contributions'),_class="ribbon-green"),
+                _class="ribbon-wrapper-green",),
+            H3(T('My Ocean')),
+            ## Insert My Contributions page html between these comment tags ##
+
+            T('(This will contain all of the ideas I contribute to)'),
+
+            # End #
+            _class="wrapper nav-window", _id="my-contrib", _style="display: inline"
+        ),
+
+        DIV(DIV(
+            DIV(T('Following'),_class="ribbon-green"),
+                _class="ribbon-wrapper-green",),
+            H3(T('Following')),
+            ## Insert Follow page html between these comment tags ##
+
+            T('(This will contain all of the ideas that I follow.)'),
+
+            # End #
+            _class="wrapper nav-window", _id="my-follow", _style="display: inline"
+        ),
+
+        DIV(DIV(
+            DIV(T('Profile'),_class="ribbon-green"),
+                _class="ribbon-wrapper-green",),
+            H3(T('My Profile')),
+            ## Insert Follow page html between these comment tags ##
+
+            T('(This will link to an edit profile page)'),
+
+            # End #
+            _class="wrapper nav-window", _id="my-profile", _style="display: inline"
+        ),
+        _class="wb_body_wrapper"
+    ),
+    _class='wb-body', _style=bg_url)
+}}
