@@ -20,7 +20,7 @@
             ),
             DIV(
                 SPAN( _class="glyphicon glyphicon-lock sidebar_glyphicon"),
-                _class="inner", _title="Edit Profile",
+                _class="inner bottom_left", _title="Edit Profile",
                 _id="my-profile-link", _onclick="show('#my-profile')"
             ),
             _class="wb_sidebar"
@@ -34,9 +34,8 @@
             H3(T('My Tank')),
             ## Insert My Tank page html between these comment tags ##
 
-            T('This will contain all of my ideas.'),
-            XML(ideas),
-
+            T('Here are all of your ideas'),
+            XML(myIdeas),
             # End #
             _class="wrapper nav-window", _id="my-tank", _style="display: inline"
         ),
@@ -47,8 +46,8 @@
             H3(T('My Ocean')),
             ## Insert My Contributions page html between these comment tags ##
 
-            T('(This will contain all of the ideas I contribute to)'),
-
+            T('Here are all of the ideas that you contribute to'),
+            XML(myContribs),
             # End #
             _class="wrapper nav-window", _id="my-contrib", _style="display: inline"
         ),
@@ -59,8 +58,8 @@
             H3(T('Following')),
             ## Insert Follow page html between these comment tags ##
 
-            T('(This will contain all of the ideas that I follow.)'),
-
+            T('Here are all of the ideas that you follow'),
+            XML(myFollows),
             # End #
             _class="wrapper nav-window", _id="my-follow", _style="display: inline"
         ),
