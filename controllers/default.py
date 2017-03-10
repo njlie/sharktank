@@ -182,10 +182,23 @@ def workbench():
 
     response.files.append(URL('static', 'js/workbench.js'))
     response.files.append(URL('static', 'css/workbench.css'))
+
     my_tank_rows = db((db.idea_group.idea_id==db.idea.id) &
                 (db.idea_group.user_id==auth.user_id) &
                 (db.idea_group.g_privileges == 'O')).select(db.idea.title)
-    ideas = ''
+    my_contrib_rows = db((db.idea_group.idea_id == db.idea.id) &
+                      (db.idea_group.user_id == auth.user_id) &
+                      (db.idea_group.g_privileges == 'C')).select(db.idea.title)
+    my_follow_rows = db((db.idea_group.idea_id == db.idea.id) &
+                      (db.idea_group.user_id == auth.user_id) &
+                      (db.idea_group.g_privileges == 'F')).select(db.idea.title)
+    myIdeas = ''
+    myFollows = ''
+    myContribs = ''
     for row in my_tank_rows:
-        ideas += str(LI(row.title))
-    return dict(ideas=ideas, bg_url=bg_url)
+        myIdeas += str(LI(row.title))
+    for row in my_contrib_rows:
+        myFollows += str(LI(row.title))
+    for row in my_follow_rows:
+        myContribs += str(LI(row.title))
+    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,bg_url=bg_url)
