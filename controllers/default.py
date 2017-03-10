@@ -144,8 +144,8 @@ def get_data():
 def showGroupMembers():
     post = db.post[request.args(0)]
     print 'post '
-    print post.idea_id
-    id = int(post.idea_id)
+    print 'id '
+    print id
     rows = db((db.idea_group.user_id == db.auth_user.id) &
               (db.idea_group.idea_id == post)).select(
         db.auth_user.first_name,

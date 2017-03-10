@@ -18,6 +18,6 @@
     </tr>
 {{pass}}
 </table>
-<a href="{{=URL('showIdea', args=post.idea_id)}}" type="button"> <- Back to Idea</a><br/>
+<a href="{{=URL('showIdea', args=request.args(0))}}" type="button"> <- Back to Idea</a><br/>
 </body>
 </html>
