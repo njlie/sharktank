@@ -7,6 +7,7 @@
             {{for p in cat:}}
             <tr>
                 <td><a href="{{=URL('showIdea',args=p.idea.id)}}">{{=p.idea.title}}</a></td>
+				<td>{{=votes[str(p.idea.id)]}}</td>
                 <td>{{=p.category.categories}}</td>
                 <td>{{=p.idea.startdate}}</td>
                 <td>{{=p.idea.enddate}}</td>

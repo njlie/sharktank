@@ -94,7 +94,27 @@ def ideasList():
         db.idea.active_idea
         )
 
-    return dict(cat=cat)
+	
+    votecounts = {}
+
+    ideas = db().select(db.idea.id)
+    for idea in ideas:
+        count = 0
+        #currIdea = idea.id
+        print "idea: %s" % idea.id
+        votedb = db((db.vote.idea_id == idea.id) & (db.vote.vote == 'True')).select()
+        for row in votedb:
+            count += 1
+            print "Count: %s" % count
+        votedb = db((db.vote.idea_id == idea.id) & (db.vote.vote == 'False')).select()
+        for row in votedb:
+            count -= 1
+            print "Count: %s" % count
+        print "ideaid string: %s" % str(idea.id)
+        votecounts[str(idea.id)] = count
+
+
+    return dict(cat=cat, votes=votecounts)
 
 
 # ///////////////////////////////////////////////////////////////////////////
