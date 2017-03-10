@@ -1,51 +1,59 @@
 {{extend 'layout.html'}}
-<style>
-   .glyphicon {
-    font-size: 40px;
-    }
-</style>
-<h2>{{=thePost.title}}</h2>
-<h4>{{=thePost.description}}</h4>
-<h4>startdate: {{=thePost.startdate}}</h4>
-<h4>Enddate: {{=thePost.enddate}}</h4>
-{{if  thePost.active_idea:}}
-    <h4>Active Idea</h4>
-{{else:}}
-    <h4>Inactive</h4>
-{{pass}}
-{{if thePost.documents:}}
-    <img width="400" src="{{=URL('default', 'download', args=thePost.documents)}}" />
-{{pass}}
-
-<h2>what others are saying</h2>
-
-{{if auth.user_id:}}
-    <div>
-        <a><span class="glyphicon glyphicon-thumbs-up"></span></a>
-        <a><span class="glyphicon glyphicon-thumbs-down"></span></a>
-    </div>
-{{else:}}
-    <div>
-        <a> <span class="glyphicon glyphicon-thumbs-up"></span></a>
-        <a> <span class="glyphicon glyphicon-thumbs-down"></span></a>
-    </div>
-{{pass}}
-
-{{if len(comments):}}
-    <h2>Comments</h2>
-    {{for post in comments:}}
-        <p>{{=post.author}} :  {{=post.p_content}}</p>
-    {{pass}}
-{{else:}}
-<h5>be the first comment</h5>
-{{pass}}
-{{if auth.user_id:}}
-    <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
-    <h5>Leave a comment</h5>
-    {{=form}}
-    <a href="{{=URL('showGroupMembers', args=thePost.id)}}" type="button"> Connect With Group</a><br/>
-{{else:}}
-    <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
-{{pass}}
-
-
+<html>
+   <style>
+      .well {
+      text-align: center;
+      }
+      .btn {
+      background: #cc5e00;
+      color: #ffffff;
+      }
+      .glyphicon {
+      font-size: 40px;
+      }
+   </style>
+   <body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
+      <div class="well">
+         <h2>{{=thePost.title}}</h2>
+         <h4>{{=thePost.description}}</h4>
+         <h4>startdate: {{=thePost.startdate}}</h4>
+         <h4>Enddate: {{=thePost.enddate}}</h4>
+         {{if  thePost.active_idea:}}
+         <h4>Active Idea</h4>
+         {{else:}}
+         <h4>Inactive</h4>
+         {{pass}}
+         {{if thePost.documents:}}
+         <img width="400" src="{{=URL('default', 'download', args=thePost.documents)}}" />
+         {{pass}}
+         <h2>what others are saying</h2>
+         {{if auth.user_id:}}
+         <div>
+            <a><span class="glyphicon glyphicon-thumbs-up"></span></a>
+            <a><span class="glyphicon glyphicon-thumbs-down"></span></a>
+         </div>
+         {{else:}}
+         <div>
+            <a> <span class="glyphicon glyphicon-thumbs-up"></span></a>
+            <a> <span class="glyphicon glyphicon-thumbs-down"></span></a>
+         </div>
+         {{pass}}
+         {{if len(comments):}}
+         <h2>Comments</h2>
+         {{for post in comments:}}
+         <p>{{=post.author}} :  {{=post.p_content}}</p>
+         {{pass}}
+         {{else:}}
+         <h5>be the first comment</h5>
+         {{pass}}
+         {{if auth.user_id:}}
+         <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
+         <h5>Leave a comment</h5>
+         {{=form}}
+         <div><a class="btn" href="{{=URL('showGroupMembers', args=thePost.id)}}">JoinGroups</a></div>
+         {{else:}}
+         <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
+         {{pass}}
+      </div>
+   </body>
+</html>

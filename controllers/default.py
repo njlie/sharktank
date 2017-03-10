@@ -80,16 +80,21 @@ def showIdea():
     if form.process().accepted:  # if the comment is valid
         response.flash = 'your comment is posted'
     comments = db(db.post.idea_id == thePost.id).select()  # the comments that are associated with that idea
-
-    vote = db(db.vote).select()
-
-    return dict(thePost=thePost, form=form, comments=comments, vote=vote)
+    return dict(thePost=thePost, form=form, comments=comments)
 
 
 # ///////////////////////////////////////////////////////////////////////////
 def ideasList():
-    rows = db(db.idea).select()  # select the ideas
-    return dict(rows=rows)
+    cat = db(db.idea.category == db.category.id).select(
+        db.idea.id,
+        db.idea.title,
+        db.idea.startdate,
+        db.idea.enddate,
+        db.category.categories,
+        db.idea.active_idea
+        )
+
+    return dict(cat=cat)
 
 
 # ///////////////////////////////////////////////////////////////////////////
