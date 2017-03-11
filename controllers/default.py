@@ -82,7 +82,6 @@ def showIdea():
     comments = db(db.post.idea_id == thePost.id).select()  # the comments that are associated with that idea
     return dict(thePost=thePost, form=form, comments=comments)
 
-
 # ///////////////////////////////////////////////////////////////////////////
 def ideasList():
     cat = db(db.idea.category == db.category.id).select(
@@ -223,3 +222,31 @@ def workbench():
     for row in my_follow_rows:
         myContribs += str(LI(row.title))
     return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,bg_url=bg_url)
+
+@auth.requires_login()
+def editPost():
+    post = db.post[request.args(0)]
+    if not(post and post.user_id == auth.user_id):
+        redirect(URL('showIdea'))
+    form = SQLFORM(db.post, post,
+                 labels= {'post_content': "Comment"},
+                 showid= False,
+                 deletable= True,
+                 submit_button = 'Update your comment',
+                  )
+    form.add_button('Cancel', URL('showIdea', args=post.idea_id))
+
+    if form.process(keepvalues=True).accepted:
+       response.flash = 'comment updated'
+       redirect(URL('showIdea', args=post.idea_id))
+    elif form.errors:
+       response.flash = 'please complete your post'
+    else:
+       response.flash = 'please edit your comment'
+    return dict(form=form)
+
+@auth.requires_login()
+def myprofile():
+    form=auth.profile()
+    form.add_button('Cancel', URL('logedIn'))
+    return dict(form=form)

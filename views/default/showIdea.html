@@ -41,8 +41,14 @@
          {{if len(comments):}}
          <h2>Comments</h2>
          {{for post in comments:}}
-         <p>{{=post.author}} :  {{=post.p_content}}</p>
+         <p>{{=post.author}} :  {{=post.p_content}}
          {{pass}}
+
+          {{if post.user_id==auth.user_id:}}
+            <a href="{{=URL('default', 'editPost', args=[post.id])}}">Edit Comment</a></p>
+
+        {{pass}}
+
          {{else:}}
          <h5>be the first comment</h5>
          {{pass}}
