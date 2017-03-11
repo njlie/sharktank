@@ -141,6 +141,7 @@ def create_idea():
             idea_id = 1
 
         db.idea_group.insert(g_privileges='O', idea_id=idea_id)
+        db.vote.insert(user_id=auth.user_id, idea_id=idea_id, vote='True')
 
         response.view = 'default/index.html'
         response.flash = 'Idea Processed'
