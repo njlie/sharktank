@@ -1,2 +1,9 @@
 {{extend 'layout.html'}}
-{{=form}}
+<html>
+   <body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
+      <div class="well">
+         {{extend 'layout.html'}}
+         {{=form}}
+      </div>
+   </body>
+</html>

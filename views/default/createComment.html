@@ -1,6 +1,5 @@
 {{extend 'layout.html'}}
-<!DOCTYPE html>
-<html lang="en">
+<html>
    <head>
       <style>
          .btn {
@@ -13,17 +12,8 @@
    </head>
    <body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
       <div class="well">
-         <h2>Group Member details</h2>
-         <table class="table">
-            {{=TR(TH(T('First Name')),TH(T('Last Name')),TH(T('Email')))}}
-            {{for row in rows:}}
-            <tr>
-               {{=TD(T(str(row.auth_user.first_name)))}}
-               {{=TD(T(str(row.auth_user.last_name)))}}
-               {{=TD(T(str(row.auth_user.email)))}}
-            </tr>
-            {{pass}}
-         </table>
+         <h3>Create comment:</h3>
+         {{=form}}
          <div><a class="btn" href="{{=URL('showIdea', args=request.args(0))}}">Back to Idea</a></div>
       </div>
    </body>
