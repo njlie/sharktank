@@ -4,9 +4,10 @@
 google.charts.load('current', {'packages': ['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
-var categoryArray = google.visualization.DataTable(ideas);
+
 
 function drawChart() {
+    var categoryArray = google.visualization.arrayToDataTable(ideas);
 
     var data = google.visualization.arrayToDataTable([
         ['Category', 'Number of Pitches'],

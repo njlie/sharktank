@@ -17,7 +17,12 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    return dict()
+    ideas = exportIdeas()
+    print 'ideas '
+    print ideas
+    for row in ideas:
+        print ideas
+    return dict(ideas=ideas)
 
 
 def user():
@@ -92,15 +97,14 @@ def ideasList():
         db.idea.enddate,
         db.category.categories,
         db.idea.active_idea
-        )
+    )
 
-	
     votecounts = {}
 
     ideas = db().select(db.idea.id)
     for idea in ideas:
         count = 0
-        #currIdea = idea.id
+        # currIdea = idea.id
         print "idea: %s" % idea.id
         votedb = db((db.vote.idea_id == idea.id) & (db.vote.vote == 'True')).select()
         for row in votedb:
@@ -112,7 +116,6 @@ def ideasList():
             print "Count: %s" % count
         print "ideaid string: %s" % str(idea.id)
         votecounts[str(idea.id)] = count
-
 
     return dict(cat=cat, votes=votecounts)
 
@@ -165,7 +168,6 @@ def get_data():
     return response.json(custdata)
 
 
-
 def showGroupMembers():
     post = db.post[request.args(0)]
     print 'post '
@@ -186,32 +188,33 @@ def showGroupMembers():
 
 
 def exportIdeas():
-    rows = db(db.idea).select()
-    arr = []
+    count = db.category.categories.count()
+    rows = db(db.idea.category == db.category.id).select(
+        db.category.categories, count, groupby=db.category.categories)
     for row in rows:
-        arr.append(int(row.category))
-    return (arr)
+        print row
+    print 'in function'
+    return dict(rows=rows)
 
 @auth.requires_login()
 def workbench():
-
-    #sumUpVote = db().select(db.vote.vote=='True').sum()
-    #sumDownVote = db().select(db.vote.vote=='False').sum()
+    # sumUpVote = db().select(db.vote.vote=='True').sum()
+    # sumDownVote = db().select(db.vote.vote=='False').sum()
 
     bg_url = 'background-image:url(' + str(URL('static', 'images/shark_bg.jpg')) + ')'
 
     response.files.append(URL('static', 'js/workbench.js'))
     response.files.append(URL('static', 'css/workbench.css'))
 
-    my_tank_rows = db((db.idea_group.idea_id==db.idea.id) &
-                (db.idea_group.user_id==auth.user_id) &
-                (db.idea_group.g_privileges == 'O')).select(db.idea.title)
+    my_tank_rows = db((db.idea_group.idea_id == db.idea.id) &
+                      (db.idea_group.user_id == auth.user_id) &
+                      (db.idea_group.g_privileges == 'O')).select(db.idea.title)
     my_contrib_rows = db((db.idea_group.idea_id == db.idea.id) &
-                      (db.idea_group.user_id == auth.user_id) &
-                      (db.idea_group.g_privileges == 'C')).select(db.idea.title)
+                         (db.idea_group.user_id == auth.user_id) &
+                         (db.idea_group.g_privileges == 'C')).select(db.idea.title)
     my_follow_rows = db((db.idea_group.idea_id == db.idea.id) &
-                      (db.idea_group.user_id == auth.user_id) &
-                      (db.idea_group.g_privileges == 'F')).select(db.idea.title)
+                        (db.idea_group.user_id == auth.user_id) &
+                        (db.idea_group.g_privileges == 'F')).select(db.idea.title)
     myIdeas = ''
     myFollows = ''
     myContribs = ''
@@ -221,4 +224,4 @@ def workbench():
         myFollows += str(LI(row.title))
     for row in my_follow_rows:
         myContribs += str(LI(row.title))
-    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,bg_url=bg_url)
+    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs, bg_url=bg_url)
