@@ -33,7 +33,8 @@ if auth.user_id:
         (T('Home'), False, URL('default', 'logedIn'), []),
         (T('Workbench'), False, URL('default', 'workbench'), []),
         (T('Pitch Idea'), False, URL('default', 'create_idea'), []),
-        (T('Idea Tank'), False, URL('default', 'ideasList'), [])
+        (T('Idea Tank'), False, URL('default', 'ideasList'), []),
+        (T('Edit Profile'), False, URL('default', 'myprofile'), [])
     ]
 else:
     response.menu = [

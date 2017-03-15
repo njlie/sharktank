@@ -59,18 +59,19 @@
          {{pass}}
          <h2>what others are saying</h2>
          {{if len(comments):}}
-         <h2>Comments</h2>
-         {{for post in comments:}}
-         <p>{{=post.author}} :  {{=post.p_content}}
-            {{pass}}
-            {{if post.user_id==auth.user_id:}}
-            <a href="{{=URL('default', 'editPost', args=[post.id])}}">Edit Comment</a>
-         </p>
-         {{pass}}
-         {{else:}}
-         <h5>be the first comment</h5>
-         {{pass}}
+           <h2>Comments</h2>
+           {{for post in comments:}}
+             <p>{{=post.author}} :  {{=post.p_content}}
+             {{pass}}
+             {{if post.user_id==auth.user_id:}}
+               <a href="{{=URL('default', 'editPost', args=[post.id])}}">Edit Comment</a>
+             </p>
+             {{pass}}
+             {{else:}}
+               <h5>be the first comment</h5>
+             {{pass}}
          {{if auth.user_id:}}
+
          <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
          <div>
             <a class="btn" href="{{=URL('createComment', args=thePost.id)}}">Comment</a>

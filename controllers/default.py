@@ -88,11 +88,18 @@ def showIdea():
 # ///////////////////////////////////////////////////////////////////////////
 
 def createComment():
-    post = db.post[request.args(0)]
+    post = db.idea[request.args(0)]
     db.post.idea_id.default = post.id
-    form = SQLFORM(db.post)  # this is the form for filling out a comment
+    form = SQLFORM(db.post,
+                   showid=False,
+                   deletable=True,
+                   submit_button = 'Post your comment')
     if form.process().accepted:  # if the comment is valid
-        redirect(URL('showIdea', args=post.idea_id))
+        redirect(URL('showIdea', args=post.id))
+    elif form.errors:
+       response.flash = 'please complete your post'
+    else:
+       response.flash = 'please edit your comment'
     return dict(form=form)
 
 # ///////////////////////////////////////////////////////////////////////////
