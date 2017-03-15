@@ -1,24 +1,20 @@
 {{extend 'layout.html'}}
 <html>
-   <body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
-      <h2>Idea Tank</h2>
-      <div class="well">
-         <table class="table">
-            {{for p in cat:}}
-            <tr>
-                <td><a href="{{=URL('showIdea',args=p.idea.id)}}">{{=p.idea.title}}</a></td>
-				<td>{{=votes[str(p.idea.id)]}}</td>
-                <td>{{=p.category.categories}}</td>
-                <td>{{=p.idea.startdate}}</td>
-                <td>{{=p.idea.enddate}}</td>
-                {{if  p.idea.active_idea:}}
-               <td>Active Idea</td>
-               {{else:}}
-               <td>Inactive</td>
-               {{pass}}
-            </tr>
-            {{pass}}
-         </table>
-      </div>
-   </body>
+<body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
+<h2>Idea Tank</h2>
+<div class="well">
+    <table class="table">
+    {{=TR(TH('Title'),TH('UpVote'),TH('DownVote'),TH('Posted'),TH('Active'))}}
+    {{for idea in ideas:}}
+     {{=TR(
+    TD(A(idea['Title'], _href=URL('default', 'showIdea', args=[idea['ID']]))),
+    TD(idea['UpVote']),
+    TD(idea['DownVote']),
+    TD(idea['Posted'].strftime('%I:%M %p %m/%d/%Y')),
+    TD(idea['Active'])
+    )}}
+    {{pass}}
+    </table>
+</div>
+</body>
 </html>

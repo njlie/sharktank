@@ -97,36 +97,18 @@ def createComment():
 
 # ///////////////////////////////////////////////////////////////////////////
 def ideasList():
-    cat = db(db.idea.category == db.category.id).select(
-        db.idea.id,
-        db.idea.title,
-        db.idea.startdate,
-        db.idea.enddate,
-        db.category.categories,
-        db.idea.active_idea
-        )
+    query = """SELECT q.idea_id AS ID, i.title AS Title, i.startdate AS Posted, i.active_idea AS Active,
+            (SELECT COUNT(v.vote) FROM vote AS v WHERE v.vote = "T" AND v.idea_id = q.idea_id) as UpVote,
+            (SELECT COUNT(v.vote) FROM vote AS v WHERE v.vote = "F" AND v.idea_id = q.idea_id) as DownVote
+            FROM vote AS q
+            INNER JOIN idea AS i
+            ON q.idea_id=i.id;"""
+
+    ideas = db.executesql(query, as_dict=True)
+
+    return dict(ideas=ideas)
 
 	
-    votecounts = {}
-
-    ideas = db().select(db.idea.id)
-    for idea in ideas:
-        count = 0
-        #currIdea = idea.id
-        print "idea: %s" % idea.id
-        votedb = db((db.vote.idea_id == idea.id) & (db.vote.vote == 'True')).select()
-        for row in votedb:
-            count += 1
-            print "Count: %s" % count
-        votedb = db((db.vote.idea_id == idea.id) & (db.vote.vote == 'False')).select()
-        for row in votedb:
-            count -= 1
-            print "Count: %s" % count
-        print "ideaid string: %s" % str(idea.id)
-        votecounts[str(idea.id)] = count
-
-
-    return dict(cat=cat, votes=votecounts)
 
 
 # ///////////////////////////////////////////////////////////////////////////
