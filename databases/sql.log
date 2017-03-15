@@ -343,3 +343,11 @@ CREATE TABLE remark(
 timestamp: 2017-03-06T02:05:23.762871
 ALTER TABLE post ADD author CHAR(512);
 success!
+timestamp: 2017-03-14T18:19:17.716000
+CREATE TABLE user_message(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    from_user INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    to_user INTEGER REFERENCES auth_user (id) ON DELETE CASCADE  ,
+    the_message TEXT
+);
+success!

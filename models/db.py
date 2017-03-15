@@ -191,6 +191,15 @@ db.define_table('post',
                       default=lambda:datetime.now(),
                       requires=IS_NOT_EMPTY()))
 
+# This table holds the user messages
+db.define_table('user_message',
+                Field('from_user', 'reference auth_user',
+                      requires=IS_NOT_EMPTY(), default=auth.user_id),
+                Field('to_user', 'reference auth_user',
+                      requires=IS_NOT_EMPTY()),
+                Field('the_message', 'text',
+                      requires=IS_NOT_EMPTY()))
+
 def get_author():
     author = 'none'
     if auth.user:
