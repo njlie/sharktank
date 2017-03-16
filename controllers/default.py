@@ -250,5 +250,5 @@ def editPost():
 @auth.requires_login()
 def myprofile():
     form=auth.profile()
-    form.add_button('Cancel', URL('logedIn'))
+    form.add_button('Cancel', URL('workbench'))
     return dict(form=form)

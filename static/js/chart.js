@@ -21,7 +21,7 @@ function drawChart() {
 
     var options = {
         'title': 'Spread of ideas',
-        'backgroundColor': 'grey',
+        'backgroundColor': 'transparent',
         'is3D': true
     };
 
