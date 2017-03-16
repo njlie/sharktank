@@ -122,6 +122,7 @@ def ideasList():
 @auth.requires_login()
 def create_idea():
     form = SQLFORM(db.idea)
+    form.add_button('Cancel', URL('workbench'))
     form.process()
     if form.accepted:
 
