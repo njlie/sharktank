@@ -85,7 +85,10 @@ def showIdea():
     # Grab comments associated with the idea
     comments = db(db.post.idea_id == thePost.id).select()  # the comments that are associated with that idea
 
-    return dict(thePost=thePost, comments=comments)
+    upvotes = db((db.vote.idea_id == request.args[0]) & (db.vote.vote == 'T')).count()
+    downvotes = db((db.vote.idea_id == request.args[0]) & (db.vote.vote == 'F')).count()
+
+    return dict(thePost=thePost, comments=comments, upvotes=upvotes, downvotes=downvotes)
 
 # ///////////////////////////////////////////////////////////////////////////
 
@@ -342,4 +345,30 @@ def stop_contrib():
     return """<button class ="btn" id="contrib" onclick="jQuery('#id').val('""" + \
            request.vars.id + "');ajax('" + URL('default', 'contribRequest') + \
            """', ['id'], 'contrib');" > Request Contribute </button >"""
+
+
+def upvote():
+
+    if db.vote(user_id=auth.user_id, idea_id=request.vars.id, vote='T'):
+        response.flash = "You have already voted for this idea!"
+    else:
+        if db.vote.insert(user_id=auth.user_id, idea_id=request.vars.id, vote='T'):
+            response.flash = "Vote added"
+
+    return ' (' + str(db((db.vote.idea_id == request.vars.id) & (db.vote.vote == 'T')).count()) + ')'
+
+def downvote():
+
+    if db.vote(user_id=auth.user_id, idea_id=request.vars.id, vote='F'):
+        response.flash = "You have already voted against this idea!"
+    else:
+        if db.vote.insert(user_id=auth.user_id, idea_id=request.vars.id, vote='F'):
+            response.flash = "Vote added"
+
+    return ' (' + str(db((db.vote.idea_id == request.vars.id) & (db.vote.vote == 'F')).count()) + ')'
+
+
+
+
+
 ###### End Ajax Functions ##########

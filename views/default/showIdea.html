@@ -1,31 +1,23 @@
 {{extend 'layout.html'}}
 <html>
-   <head>
-       <style>
-           .well {
-          text-align: center;
-          }
-          .btn {
-          background: #cc5e00;
-          color: #ffffff;
-          }
-          .glyphicon {
-          font-size: 40px;
-          }
-        </style>
-   </head>
+
 
    <body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
       <div class="well">
-          <h2>{{=thePost.title}}</h2>
-          <h4>{{=thePost.description}}</h4>
-          <h4>startdate: {{=thePost.startdate}}</h4>
+          <div class="details">
+              <!-- If there is a picture, present it to them -->
+              {{if thePost.documents:}}
+                <img width="400" class="right" src="{{=URL('default', 'download', args=thePost.documents)}}" />
+              {{pass}}
+              <h2 class="left">{{=thePost.title}}</h2>
+              <h4 class="right">Created: {{=thePost.startdate.strftime('%I:%M %p %x')}}</h4>
+              <br /><br /><br />
+              <div class="desc"><h4>{{=thePost.description}}</h4></div>
 
 
-          <!-- If there is a picture, present it to them -->
-          {{if thePost.documents:}}
-            <img width="400" src="{{=URL('default', 'download', args=thePost.documents)}}" />
-          {{pass}}
+
+
+          </div>
 
           <div class="comments">
               <h2>What others are saying</h2>
@@ -116,6 +108,14 @@
 
 
                             {{pass}}
+                            {{=BUTTON("Upvotes" , SPAN(" (" + str(upvotes) + ")", _id="upvote"), _class="btn",
+                                        _onclick="jQuery('#id').val('" + request.args[0] + \
+                                                        "');ajax('" + URL('default', 'upvote') + "', ['id'], 'upvote');")
+                            }}
+                            {{=BUTTON("Down Votes" , SPAN(" (" + str(downvotes) + ")", _id="upvote"), _class="btn",
+                                        _onclick="jQuery('#id').val('" + request.args[0] + \
+                                                        "');ajax('" + URL('default', 'downvote') + "', ['id'], 'downvote');")
+                            }}
                      </div>
             {{else:}}
                 <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>

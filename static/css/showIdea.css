@@ -8,3 +8,19 @@
 .glyphicon {
     font-size: 40px;
 }
+
+.details {
+  width: 100%;
+  min-height: 400px;
+}
+.desc {
+    text-align: left;
+}
+
+.left {
+    float:left;
+}
+
+.right {
+    float:right;
+}
