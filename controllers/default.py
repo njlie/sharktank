@@ -213,9 +213,9 @@ def workbench():
     for row in my_tank_rows:
         myIdeas += str(LI(row.title))
     for row in my_contrib_rows:
-        myFollows += str(LI(row.title))
-    for row in my_follow_rows:
         myContribs += str(LI(row.title))
+    for row in my_follow_rows:
+        myFollows += str(LI(row.title))
     for row in my_messages:
         myMessages += str(LI(row.the_message)) + \
                       """<button class ="btn" id="allowContrib" onclick=" \
