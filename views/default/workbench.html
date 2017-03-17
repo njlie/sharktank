@@ -19,8 +19,8 @@
                 _id="my-follow-link", _onclick="show('#my-follow')"
             ),
             DIV(
-                SPAN( _class="glyphicon glyphicon-lock sidebar_glyphicon"),
-                _class="inner bottom_left", _title="Edit Profile",
+                SPAN( _class="glyphicon glyphicon-envelope sidebar_glyphicon"),
+                _class="inner bottom_left", _title="My Messages",
                 _id="my-profile-link", _onclick="show('#my-profile')"
             ),
             _class="wb_sidebar"
@@ -67,12 +67,15 @@
         DIV(DIV(
             DIV(T('Profile'),_class="ribbon-green"),
                 _class="ribbon-wrapper-green",),
-            H3(T('My Profile')),
+            H3(T('My Messages')),
             ## Insert Follow page html between these comment tags ##
-            form,
+
+            T('(This will display messages)'),
+
             # End #
             _class="wrapper nav-window", _id="my-profile", _style="display: inline"
         ),
+
         _class="wb_body_wrapper"
     ),
     _class='wb-body', _style=bg_url)

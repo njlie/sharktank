@@ -111,7 +111,7 @@ def createComment():
 
 # ///////////////////////////////////////////////////////////////////////////
 def ideasList():
-    query = """SELECT q.idea_id AS ID, i.title AS Title, i.startdate AS Posted, i.active_idea AS Active,
+    query = """SELECT DISTINCT q.idea_id AS ID, i.title AS Title, i.startdate AS Posted, i.active_idea AS Active,
             (SELECT COUNT(v.vote) FROM vote AS v WHERE v.vote = "T" AND v.idea_id = q.idea_id) as UpVote,
             (SELECT COUNT(v.vote) FROM vote AS v WHERE v.vote = "F" AND v.idea_id = q.idea_id) as DownVote
             FROM vote AS q
@@ -190,15 +190,10 @@ def exportIdeas():
 @auth.requires_login()
 def workbench():
 
-    #sumUpVote = db().select(db.vote.vote=='True').sum()
-    #sumDownVote = db().select(db.vote.vote=='False').sum()
-
     bg_url = 'background-image:url(' + str(URL('static', 'images/shark_bg.jpg')) + ')'
 
     response.files.append(URL('static', 'js/workbench.js'))
     response.files.append(URL('static', 'css/workbench.css'))
-
-    form=auth.profile()
 
     my_tank_rows = db((db.idea_group.idea_id==db.idea.id) &
                 (db.idea_group.user_id==auth.user_id) &
@@ -209,6 +204,7 @@ def workbench():
     my_follow_rows = db((db.idea_group.idea_id == db.idea.id) &
                       (db.idea_group.user_id == auth.user_id) &
                       (db.idea_group.g_privileges == 'F')).select(db.idea.title)
+    my_messages = db(db.user_message.to_user==auth.user_id).select()
     myIdeas = ''
     myFollows = ''
     myContribs = ''
@@ -218,7 +214,7 @@ def workbench():
         myFollows += str(LI(row.title))
     for row in my_follow_rows:
         myContribs += str(LI(row.title))
-    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,bg_url=bg_url, form=form)
+    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,my_messages=my_messages,bg_url=bg_url)
 
 @auth.requires_login()
 def editPost():
