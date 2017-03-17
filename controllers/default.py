@@ -74,6 +74,7 @@ def logedIn():
 
 # /////////////////////////////////////////////////////////////////////////
 def showIdea():
+    response.files.append(URL('static', 'css/showIdea.css'))
     thePost = db.idea(request.args(0, cast=int))  # this is the idea
     db.post.idea_id.default = thePost.id  # set the idea id of the comments to the post id
     #form = SQLFORM(db.post)  # this is the form for filling out a comment
