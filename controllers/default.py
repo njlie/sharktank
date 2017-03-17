@@ -211,6 +211,8 @@ def workbench():
     response.files.append(URL('static', 'js/workbench.js'))
     response.files.append(URL('static', 'css/workbench.css'))
 
+    form=auth.profile()
+
     my_tank_rows = db((db.idea_group.idea_id==db.idea.id) &
                 (db.idea_group.user_id==auth.user_id) &
                 (db.idea_group.g_privileges == 'O')).select(db.idea.title)
@@ -229,7 +231,7 @@ def workbench():
         myFollows += str(LI(row.title))
     for row in my_follow_rows:
         myContribs += str(LI(row.title))
-    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,bg_url=bg_url)
+    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,bg_url=bg_url, form=form)
 
 @auth.requires_login()
 def editPost():
