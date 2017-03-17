@@ -208,13 +208,24 @@ def workbench():
     myIdeas = ''
     myFollows = ''
     myContribs = ''
+    myMessages = ''
+
     for row in my_tank_rows:
         myIdeas += str(LI(row.title))
     for row in my_contrib_rows:
         myFollows += str(LI(row.title))
     for row in my_follow_rows:
         myContribs += str(LI(row.title))
-    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,my_messages=my_messages,bg_url=bg_url)
+    for row in my_messages:
+        myMessages += str(LI(row.the_message)) + \
+                      """<button class ="btn" id="allowContrib" onclick=" \
+                          jQuery('#msgId').val('""" + str(row.id) + "'); \
+                                jQuery('#from_user').val('" + str(row.about_idea_id) + "'); \
+                                jQuery('#about_idea_id').val('" + str(row.from_user) + "'); " \
+                                                                                       "ajax('" + URL('default',
+                                                                                                      'allowContrib') + """', ['msgId', 'from_user', 'about_idea_id'], ':eval');" > Allow </button >"""
+
+    return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs, myMessages=myMessages, bg_url=bg_url)
 
 @auth.requires_login()
 def editPost():
@@ -353,7 +364,13 @@ def downvote():
     return ' (' + str(db((db.vote.idea_id == request.vars.id) & (db.vote.vote == 'F')).count()) + ')'
 
 
+def allowContrib():
 
+    ret = "alert('Contribution Allowed')"
+
+
+
+    return ret
 
 
 ###### End Ajax Functions ##########

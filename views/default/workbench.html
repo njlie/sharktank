@@ -1,6 +1,9 @@
 {{extend 'layout.html'}}
-{{=BODY(
-    DIV(
+<body _class='wb-body', style={{=bg_url}}>
+<form><input type="hidden" id="msgId" name="msgId" value="" /></form>
+<form><input type="hidden" id="from_user" name="from_user" value="" /></form>
+<form><input type="hidden" id="about_idea_id" name="idea_id" value="" /></form>
+    {{=DIV(
         ## Side bar start ##
         DIV(
             DIV(
@@ -69,14 +72,12 @@
                 _class="ribbon-wrapper-green",),
             H3(T('My Messages')),
             ## Insert Follow page html between these comment tags ##
-
-            T('(This will display messages)'),
+            TABLE(XML(myMessages or "You have no messages.")),
 
             # End #
             _class="wrapper nav-window", _id="my-profile", _style="display: inline"
         ),
 
         _class="wb_body_wrapper"
-    ),
-    _class='wb-body', _style=bg_url)
-}}
+    )}}
+</body>
