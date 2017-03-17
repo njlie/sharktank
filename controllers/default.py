@@ -211,9 +211,9 @@ def workbench():
     for row in my_tank_rows:
         myIdeas += str(LI(row.title))
     for row in my_contrib_rows:
-        myFollows += str(LI(row.title))
-    for row in my_follow_rows:
         myContribs += str(LI(row.title))
+    for row in my_follow_rows:
+        myFollows += str(LI(row.title))
     return dict(myIdeas=myIdeas, myFollows=myFollows, myContribs=myContribs,my_messages=my_messages,bg_url=bg_url)
 
 @auth.requires_login()
