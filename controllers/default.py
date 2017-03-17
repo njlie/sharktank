@@ -73,18 +73,19 @@ def logedIn():
 
 
 # /////////////////////////////////////////////////////////////////////////
+
 def showIdea():
+
+    # Add the custom css file
     response.files.append(URL('static', 'css/showIdea.css'))
-    thePost = db.idea(request.args(0, cast=int))  # this is the idea
-    db.post.idea_id.default = thePost.id  # set the idea id of the comments to the post id
-    #form = SQLFORM(db.post)  # this is the form for filling out a comment
-    #if form.process().accepted:  # if the comment is valid
-        #response.flash = 'your comment is posted'
+
+    # Get the idea from the db
+    thePost = db.idea[request.args[0]]
+
+    # Grab comments associated with the idea
     comments = db(db.post.idea_id == thePost.id).select()  # the comments that are associated with that idea
 
-    row = db((db.vote.user_id == auth.user.id) & (db.vote.idea_id == request.args[0])).select(db.vote.vote)
-
-    return dict(thePost=thePost, comments=comments, row=row)
+    return dict(thePost=thePost, comments=comments)
 
 # ///////////////////////////////////////////////////////////////////////////
 
@@ -257,88 +258,88 @@ def myprofile():
 
 
 ######## Ajax Functions ############
-    def follow():
+def follow():
 
-        # Add the follow record to the db.
-        db.idea_group.insert(user_id=auth.user_id, idea_id=request.vars.id, g_privileges='F')
+    # Add the follow record to the db.
+    db.idea_group.insert(user_id=auth.user_id, idea_id=request.vars.id, g_privileges='F')
 
-        ret = """<button class ="btn" id="unfollow" onclick="jQuery('#id').val('""" + \
-              request.vars.id + "');ajax('" + URL('default', 'unfollow') + \
-              """', ['id'], 'foll');" > Unfollow </button >"""
+    ret = """<button class ="btn" id="unfollow" onclick="jQuery('#id').val('""" + \
+          request.vars.id + "');ajax('" + URL('default', 'unfollow') + \
+          """', ['id'], 'foll');" > Unfollow </button >"""
 
-        # Let the user know what is happening
-        response.flash = 'You are now following ' + db.idea[request.vars.id].title + '!'
+    # Let the user know what is happening
+    response.flash = 'You are now following ' + db.idea[request.vars.id].title + '!'
 
-        return ret
+    return ret
 
-    def unfollow():
+def unfollow():
 
-        # Delete the follow record from the database
-        db((db.idea_group.user_id == auth.user_id) &
-           (db.idea_group.idea_id == request.vars.id)).delete()
+    # Delete the follow record from the database
+    db((db.idea_group.user_id == auth.user_id) &
+       (db.idea_group.idea_id == request.vars.id)).delete()
 
-        ret = """<button class ="btn" id="follow" onclick="jQuery('#id').val('""" + \
-              request.vars.id + "');ajax('" + URL('default', 'follow') + \
-              """', ['id'], 'foll');" > Follow </button >"""
+    ret = """<button class ="btn" id="follow" onclick="jQuery('#id').val('""" + \
+          request.vars.id + "');ajax('" + URL('default', 'follow') + \
+          """', ['id'], 'foll');" > Follow </button >"""
 
-        # Let the user know what just happened
-        response.flash = 'You are no longer following ' + db.idea[request.vars.id].title + '.'
+    # Let the user know what just happened
+    response.flash = 'You are no longer following ' + db.idea[request.vars.id].title + '.'
 
-        return ret
+    return ret
 
-    def contribRequest():
+def contribRequest():
+
+    # Grab the id of the owner of the idea
+    idea_owner = db((db.idea_group.idea_id == 1) & (db.idea_group.g_privileges == 'O')).select().first().user_id
+
+    # Create the message that will be sent to the owner
+    the_message = auth.user.first_name + ' ' + auth.user.last_name + ' would like to contribute to ' + db.idea[
+        request.vars.id].title
+    ret = ''
+
+    # Insert the message in to the database
+    if db.user_message.insert(from_user=auth.user_id,
+                              to_user=idea_owner,
+                              about_idea_id=request.vars.id,
+                              the_message=the_message):
+
+        # Let the user know that the message was sent
+        response.flash = "Message sent to the owner, we will alert you to their choice."
+
+        ret = """<button class ="btn" id="stopcontrib" onclick="jQuery('#id').val('""" + \
+              request.vars.id + "');ajax('" + URL('default', 'stop_contrib') + \
+              """', ['id'], 'contrib');" >Stop Contributing</button >"""
+
+
+    else:
+        # If the else clause is reached, the database insert failed
+        response.flash = "Something went wrong, please try again"
+
+    return ret
+
+def stop_contrib():
+
+    if db((db.idea_group.user_id == auth.user_id) &
+                  (db.idea_group.idea_id == request.vars.id) &
+                  (db.idea_group.g_privileges == 'C')).delete():
+
+        response.flash = "You are no longer contributing to " + db.idea[request.vars.id].title
+    else:
+        # If the else clause is reached, then that means that they had sent a request but it has not been responded to
+        # delete the message from the system.
 
         # Grab the id of the owner of the idea
         idea_owner = db((db.idea_group.idea_id == 1) & (db.idea_group.g_privileges == 'O')).select().first().user_id
 
-        # Create the message that will be sent to the owner
-        the_message = auth.user.first_name + ' ' + auth.user.last_name + ' would like to contribute to ' + db.idea[
-            request.vars.id].title
-        ret = ''
-
-        # Insert the message in to the database
-        if db.user_message.insert(from_user=auth.user_id,
-                                  to_user=idea_owner,
-                                  about_idea_id=request.vars.id,
-                                  the_message=the_message):
-
-            # Let the user know that the message was sent
-            response.flash = "Message sent to the owner, we will alert you to their choice."
-
-            ret = """<button class ="btn" id="stopcontrib" onclick="jQuery('#id').val('""" + \
-                  request.vars.id + "');ajax('" + URL('default', 'stop_contrib') + \
-                  """', ['id'], 'contrib');" >Stop Contributing</button >"""
-
-
+        # remove the record
+        if db((db.user_message.from_user == auth.user_id) &
+                      (db.user_message.to_user == idea_owner) &
+                      (db.user_message.about_idea_id == request.vars.id)).delete():
+            response.flash = "Your request for contribution has been rescinded."
         else:
-            # If the else clause is reached, the database insert failed
-            response.flash = "Something went wrong, please try again"
+            response.flash = "Something went wrong."
 
-        return ret
-
-    def stop_contrib():
-
-        if db((db.idea_group.user_id == auth.user_id) &
-                      (db.idea_group.idea_id == request.vars.id) &
-                      (db.idea_group.g_privileges == 'C')).delete():
-
-            response.flash = "You are no longer contributing to " + db.idea[request.vars.id].title
-        else:
-            # If the else clause is reached, then that means that they had sent a request but it has not been responded to
-            # delete the message from the system.
-
-            # Grab the id of the owner of the idea
-            idea_owner = db((db.idea_group.idea_id == 1) & (db.idea_group.g_privileges == 'O')).select().first().user_id
-
-            # remove the record
-            if db((db.user_message.from_user == auth.user_id) &
-                          (db.user_message.to_user == idea_owner) &
-                          (db.user_message.about_idea_id == request.vars.id)).delete():
-                response.flash = "Your request for contribution has been rescinded."
-            else:
-                response.flash = "Something went wrong."
-
-        return """<button class ="btn" id="contrib" onclick="jQuery('#id').val('""" + \
-               request.vars.id + "');ajax('" + URL('default', 'contribRequest') + \
-               """', ['id'], 'contrib');" > Request Contribute </button >"""
+    return """<button class ="btn" id="contrib" onclick="jQuery('#id').val('""" + \
+           request.vars.id + "');ajax('" + URL('default', 'contribRequest') + \
+           """', ['id'], 'contrib');" > Request Contribute </button >"""
 ###### End Ajax Functions ##########
