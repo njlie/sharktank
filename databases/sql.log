@@ -351,3 +351,6 @@ CREATE TABLE user_message(
     the_message TEXT
 );
 success!
+timestamp: 2017-03-17T00:58:50.469000
+ALTER TABLE user_message ADD about_idea_id INTEGER REFERENCES idea (id) ON DELETE CASCADE  ;
+success!

@@ -1,85 +1,128 @@
 {{extend 'layout.html'}}
 <html>
-   <style>
-      .well {
-      text-align: center;
-      }
-      .btn {
-      background: #cc5e00;
-      color: #ffffff;
-      }
-      .glyphicon {
-      font-size: 40px;
-      }
-   </style>
+   <head>
+       <style>
+           .well {
+          text-align: center;
+          }
+          .btn {
+          background: #cc5e00;
+          color: #ffffff;
+          }
+          .glyphicon {
+          font-size: 40px;
+          }
+        </style>
+   </head>
+
    <body class='wb-body' style="background-image:url('{{=URL('static', 'images/shark_bg.jpg')}}')">
       <div class="well">
-         <h2>{{=thePost.title}}</h2>
-         <h4>{{=thePost.description}}</h4>
-         <h4>startdate: {{=thePost.startdate}}</h4>
-         <h4>Enddate: {{=thePost.enddate}}</h4>
-         {{if  thePost.active_idea:}}
-         <h4>Active Idea</h4>
-         {{else:}}
-         <h4>Inactive</h4>
-         {{pass}}
-         {{if thePost.documents:}}
-         <img width="400" src="{{=URL('default', 'download', args=thePost.documents)}}" />
-         {{pass}}
-         {{if auth.user_id:}}
-         <!-- Check to see if the user is the owner of the idea, if not present them with options-->
-         {{if not db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='O'):}}
-         <div class="buttons">
-            <!--Check if they are already a follower or a contributor, if not, give them the link-->
-            {{if not ((db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='F'))
-            or (db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='O'))):}}
-            <input type="button" onclick="{{db.idea_group.insert(idea_id=request.args[0], user_id=auth.user_id, g_privileges='F')}};" value="Follow" />
-            {{pass}}
-            <!--Check if they are already a Contributor, if not, give them the link-->
-            {{if not db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='O'):}}
-            <input type="button" onclick="alert('clicked');" value="Request Contribute" />
-            {{pass}}
-         </div>
-         {{pass}}
-         {{if db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='F') :}}
-         <h3>You are a follower to this idea</h3>
-         <div>
-            {{if not row.first():}}
-            <button type="button" class="btn btn-default" onclick="{{db.vote.insert (idea_id=request.args[0], user_id=auth.user.id, vote=True)}};">
-            <span class="glyphicon glyphicon-thumbs-up"></span>
-            </button>
-            <button type="button" class="btn btn-default" onclick="{{db.vote.insert (idea_id=request.args[0], user_id=auth.user.id, vote=False)}};">
-            <span class="glyphicon glyphicon-thumbs-down"></span>
-            </button>
-            {{else:}}
-            <h2>Thank you for your vote!</h2>
-            {{pass}}
-         </div>
-         {{pass}}
-         {{pass}}
-         <h2>what others are saying</h2>
-         {{if len(comments):}}
-           <h2>Comments</h2>
-           {{for post in comments:}}
-             <p>{{=post.author}} :  {{=post.p_content}}
-             {{pass}}
-             {{if post.user_id==auth.user_id:}}
-               <a href="{{=URL('default', 'editPost', args=[post.id])}}">Edit Comment</a>
-             </p>
-             {{pass}}
-             {{else:}}
-               <h5>be the first comment</h5>
-             {{pass}}
-         {{if auth.user_id:}}
+          <h2>{{=thePost.title}}</h2>
+          <h4>{{=thePost.description}}</h4>
+          <h4>startdate: {{=thePost.startdate}}</h4>
 
-         <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
-         <div>
-            <a class="btn" href="{{=URL('createComment', args=thePost.id)}}">Comment</a>
-            <a class="btn" href="{{=URL('showGroupMembers', args=thePost.id)}}">JoinGroups</a>
-         </div>
-         {{else:}}
-         <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
-         {{pass}}
+
+          <!-- If there is a picture, present it to them -->
+          {{if thePost.documents:}}
+            <img width="400" src="{{=URL('default', 'download', args=thePost.documents)}}" />
+          {{pass}}
+
+          <div class="comments">
+              <h2>What others are saying</h2>
+
+                {{if len(comments) > 0:}}
+                    {{for post in comments:}}
+                         <p>{{=post.author}} :  {{=post.p_content}}
+                            {{pass}}
+                            {{if post.user_id==auth.user_id:}}
+                            <a href="{{=URL('default', 'editPost', args=[post.id])}}">Edit Comment</a>
+                         </p>
+                    {{pass}}
+                {{else:}}
+                        {{=A(H5(T('Be the first comment!')), _href=URL('default', 'createComment'))}}
+                {{pass}}
+          </div>
+
+            {{if auth.user_id:}}
+                     <!-- Hidden field to hold data for the ajax call-->
+                     <form><input type="hidden" id="id" name="id" value="" /></form>
+                     <h2>What do you think {{=db.auth_user[auth.user_id].first_name}}?</h2>
+                     <div>
+                        <a class="btn" href="{{=URL('createComment', args=thePost.id)}}">Comment</a>
+                        <a class="btn" href="{{=URL('showGroupMembers', args=thePost.id)}}">Show the Group</a>
+                        {{if not db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='O'):}}
+
+
+
+
+                             <!-- Check if they are already a follower, give them an unfollow link and a request contribute link -->
+                             {{if db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='F'):}}
+                                {{=SPAN(
+                                        BUTTON("Unfollow",
+                                            _class='btn',
+                                            _id='follow',
+                                            _onclick="jQuery('#id').val('" + request.args[0] +
+                                                    "');ajax('" + URL('default', 'unfollow') + "', ['id'], 'foll');" ),
+                                        _id='foll')
+                                }}
+
+                                {{=SPAN(
+                                        BUTTON("Request Contribution",
+                                            _class='btn',
+                                            _id='contrib',
+                                            _onclick="jQuery('#id').val('" + request.args[0] +
+                                                    "');ajax('" + URL('default', 'contribRequest') + "', ['id'], 'contrib');" ),
+                                        _id='contrib')
+                                }}
+
+                            <!-- If they are already a contributor, present an uncontribute button-->
+                            {{elif db.idea_group(user_id=auth.user_id, idea_id=thePost.id, g_privileges='C'):}}
+                                {{=SPAN(
+                                            BUTTON("Follow",
+                                                _class='btn',
+                                                _id='follow',
+                                                _onclick="alert('You are already a contributor!')" ),
+                                            _id='foll')
+                                }}
+                                {{=SPAN(
+                                            BUTTON("Remove Contribution",
+                                                _class='btn',
+                                                _id='contrib',
+                                                _onclick="jQuery('#id').val('" + request.args[0] +
+                                                        "');ajax('" + URL('default', 'stop_contrib') + "', ['id'], 'contrib');" ),
+                                            _id='contrib')
+                                }}
+
+                            <!-- If they are neither a follower or contributor, present both buttons-->
+                            {{else:}}
+                                    {{=SPAN(
+                                            BUTTON("Follow",
+                                                _class='btn',
+                                                _id='follow',
+                                                _onclick="jQuery('#id').val('" + request.args[0] +
+                                                        "');ajax('" + URL('default', 'follow') + "', ['id'], 'foll');" ),
+                                            _id='foll')
+                                    }}
+
+                                    {{=SPAN(
+                                            BUTTON("Request Contribution",
+                                                _class='btn',
+                                                _id='contrib',
+                                                _onclick="jQuery('#id').val('" + request.args[0] +
+                                                        "');ajax('" + URL('default', 'contribRequest') + "', ['id'], 'contrib');" ),
+                                            _id='contrib')
+                                    }}
+                            {{pass}}
+
+
+                            {{pass}}
+                     </div>
+            {{else:}}
+                <h2><a href="{{=URL('default', 'user', args=['login'])}}">Log In</a> to leave a comment</h2>
+            {{pass}}
+            {{pass}}
+
+
       </div>
    </body>
 </html>

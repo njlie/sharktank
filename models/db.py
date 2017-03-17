@@ -191,8 +191,8 @@ db.define_table('post',
                       default=lambda:datetime.now(),
                       requires=IS_NOT_EMPTY()))
 
-# This table holds the user messages
 db.define_table('user_message',
+                Field('about_idea_id', 'reference idea', requires=IS_NOT_EMPTY()),
                 Field('from_user', 'reference auth_user',
                       requires=IS_NOT_EMPTY(), default=auth.user_id),
                 Field('to_user', 'reference auth_user',
