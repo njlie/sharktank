@@ -31,7 +31,7 @@
                          </p>
                     {{pass}}
                 {{else:}}
-                        {{=A(H5(T('Be the first comment!')), _href=URL('default', 'createComment'))}}
+                        {{=A(H5(T('Be the first comment!')), _href=URL('default', 'createComment', args=[thePost.id]))}}
                 {{pass}}
           </div>
 

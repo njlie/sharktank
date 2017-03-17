@@ -92,8 +92,10 @@ def showIdea():
 
 # ///////////////////////////////////////////////////////////////////////////
 
+@auth.requires_login()
 def createComment():
     post = db.idea[request.args(0)]
+    print post
     db.post.idea_id.default = post.id
     form = SQLFORM(db.post,
                    showid=False,
@@ -131,22 +133,7 @@ def create_idea():
     form.process()
     if form.accepted:
 
-        # The following lines MUST be included when processing an idea in to the database.
-        # These lines generate the group associated with the idea, adds the creator of the idea
-        # as the owner, and dumps it in to the db.
-
-        try_by_user_groups = db(db.idea_group.user_id == auth.user_id).select(
-            db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
-
-        failsafe = db().select(db.idea_group.idea_id.max())[0][db.idea_group.idea_id.max()]
-
-        if try_by_user_groups:
-            idea_id = int(try_by_user_groups) + 1
-        elif failsafe:
-            idea_id = int(failsafe) + 1
-        else:
-            idea_id = 1
-
+        idea_id = form.vars.id
         db.idea_group.insert(g_privileges='O', idea_id=idea_id)
         db.vote.insert(user_id=auth.user_id, idea_id=idea_id, vote='True')
 
